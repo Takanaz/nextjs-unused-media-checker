@@ -1,0 +1,7 @@
+{
+  "command.checkUnusedMedia": "未使用メディアファイルをチェック",
+  "config.title": "Next.js Unused Media Checker",
+  "config.excludePatterns.description": "ファイル検索から除外するパターン",
+  "config.mediaExtensions.description": "メディアファイルとして扱う拡張子",
+  "config.publicDirectory.description": "スキャンするpublicディレクトリの名前"
+}

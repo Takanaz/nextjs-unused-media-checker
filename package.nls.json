@@ -1,0 +1,7 @@
+{
+  "command.checkUnusedMedia": "Check Unused Media Files",
+  "config.title": "Next.js Unused Media Checker",
+  "config.excludePatterns.description": "Patterns to exclude from file search",
+  "config.mediaExtensions.description": "File extensions to consider as media files",
+  "config.publicDirectory.description": "Name of the public directory to scan"
+}

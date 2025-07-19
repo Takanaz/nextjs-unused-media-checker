@@ -1,0 +1,130 @@
+{
+  "name": "nextjs-unused-media-checker",
+  "displayName": "Next.js Unused Media Checker",
+  "description": "A VSCode extension to detect unused media files in your Next.js project's public directory.",
+  "version": "0.1.0",
+  "publisher": "Takanaz",
+  "author": {
+    "name": "Takanaz"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Takanaz/nextjs-unused-media-checker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Takanaz/nextjs-unused-media-checker/issues"
+  },
+  "homepage": "https://github.com/Takanaz/nextjs-unused-media-checker#readme",
+  "keywords": [
+    "nextjs",
+    "media",
+    "unused",
+    "optimization",
+    "performance",
+    "static-analysis"
+  ],
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/package.json"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1a1a1a",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "nextjs-unused-media-checker.checkUnusedMedia",
+        "title": "%command.checkUnusedMedia%"
+      }
+    ],
+    "configuration": {
+      "title": "%config.title%",
+      "properties": {
+        "nextjs-unused-media-checker.excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/build/**",
+            "**/dist/**",
+            "**/.next/**",
+            "**/out/**",
+            "**/.git/**",
+            "**/coverage/**",
+            "**/.cache/**"
+          ],
+          "description": "%config.excludePatterns.description%"
+        },
+        "nextjs-unused-media-checker.mediaExtensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".gif",
+            ".svg",
+            ".webp",
+            ".ico",
+            ".mp4",
+            ".webm",
+            ".mp3",
+            ".avif",
+            ".bmp",
+            ".tiff",
+            ".ogg",
+            ".wav",
+            ".avi",
+            ".mov"
+          ],
+          "description": "%config.mediaExtensions.description%"
+        },
+        "nextjs-unused-media-checker.publicDirectory": {
+          "type": "string",
+          "default": "public",
+          "description": "%config.publicDirectory.description%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "yarn run check-types && yarn run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.3"
+  }
+}

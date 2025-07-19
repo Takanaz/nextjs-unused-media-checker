@@ -1,0 +1,26 @@
+# Change Log
+
+All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
+
+## [0.1.0]
+
+- Media file detection in public directory
+- File decorations in Explorer ( ！ with ref for unused, ✓ with green for used files )
+- High-performance parallel file processing
+- Internationalization support (English, Japanese)
+- Configurable exclude patterns and media extensions
+- Summary notifications with public folder access
+- Advanced pattern detection:
+
+  - Direct file references
+  - CSS url() patterns
+  - Next.js Image component patterns
+  - Dynamic imports and template literals
+  - Case-insensitive matching
+
+- Batch processing with 1MB file size limit
+- Cancellable operations
+- Comprehensive error handling
+- TypeScript strict mode
+- Full test coverage
+- ESLint + Prettier configuration
