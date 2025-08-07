@@ -107,26 +107,9 @@ Customize the extension behavior via VS Code settings (`Settings` → search "ne
 
 ## Development
 
-Interested in contributing? See our [Contributing Guide](CONTRIBUTING.md) for detailed setup instructions.
+Interested in contributing? Check out our development resources:
 
-<details>
-<summary> Quick Development Setup</summary>
+- **[Developer Guide](DEVELOPER.md)** - Comprehensive development setup and workflow
+- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project
 
-```bash
-# Clone and setup
-git clone https://github.com/Takanaz/nextjs-unused-media-checker.git
-cd nextjs-unused-media-checker
-npm install
-
-# Start development
-npm run watch    # Auto-rebuild on changes
-# Press F5 in VS Code to launch extension host
-
-# Available commands
-npm run compile      # Build extension
-npm run test         # Run tests
-npm run lint         # Run ESLint
-npm run package      # Create VSIX package
-```
-
-</details>
+For a quick start, see the [Environment Setup](DEVELOPER.md#environment-setup) section in the Developer Guide.

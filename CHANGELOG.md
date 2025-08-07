@@ -2,8 +2,15 @@
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.1]
+
+- Migrated from ESLint to Biome for better performance and consistency
+- Updated development commands and documentation
+- Improved code formatting and linting workflow
+
 ## [0.1.0]
 
+- Initial release
 - Media file detection in public directory
 - File decorations in Explorer ( ！ with ref for unused, ✓ with green for used files )
 - High-performance parallel file processing
@@ -23,4 +30,4 @@ All notable changes to the "nextjs-unused-media-checker" extension will be docum
 - Comprehensive error handling
 - TypeScript strict mode
 - Full test coverage
-- ESLint + Prettier configuration
+- Biome configuration for linting and formatting

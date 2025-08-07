@@ -56,8 +56,9 @@ npm run package
 # Type checking
 npm run check-types
 
-# Linting
-npm run lint
+# Code checking and formatting
+npm run check
+npm run check:fix
 ```
 
 ### Testing Extension
@@ -76,13 +77,13 @@ code --install-extension nextjs-unused-media-checker-*.vsix
 ### Code Style
 
 - Follow existing TypeScript conventions
-- Use ESLint and Prettier configurations
+- Use Biome for linting and formatting
 - Write meaningful commit messages
 - Add tests for new features
 
 ### Pull Request Process
 
-1. **Create a branch** from `main`
+1. **Create a branch** from `develop`
 
    ```bash
    git checkout -b feature/your-feature-name
@@ -98,7 +99,7 @@ code --install-extension nextjs-unused-media-checker-*.vsix
 
    ```bash
    npm test
-   npm run lint
+   npm run check
    npm run check-types
    ```
 
