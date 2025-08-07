@@ -2,6 +2,12 @@
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.2]
+
+- Fixed GitHub Actions workflow for automated publishing
+- Updated CI/CD pipeline to use Node.js 20 and latest @vscode/vsce
+- Improved release automation and error handling
+
 ## [0.1.1]
 
 - Migrated from ESLint to Biome for better performance and consistency
