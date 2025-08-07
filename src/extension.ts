@@ -1,44 +1,58 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import * as fs from "fs";
-import { promises as fsPromises } from "fs";
-import { initializeI18n, t } from "./i18n";
+import * as fs from 'fs';
+import { promises as fsPromises } from 'fs';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import { initializeI18n, t } from './i18n';
 
 // File decoration provider for unused media files
 class MediaFileDecorationProvider implements vscode.FileDecorationProvider {
-  private _onDidChangeFileDecorations: vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined> = new vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>();
-  readonly onDidChangeFileDecorations: vscode.Event<vscode.Uri | vscode.Uri[] | undefined> = this._onDidChangeFileDecorations.event;
+  private _onDidChangeFileDecorations: vscode.EventEmitter<
+    vscode.Uri | vscode.Uri[] | undefined
+  > = new vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>();
+  readonly onDidChangeFileDecorations: vscode.Event<
+    vscode.Uri | vscode.Uri[] | undefined
+  > = this._onDidChangeFileDecorations.event;
 
   private unusedFiles: Set<string> = new Set();
   private usedFiles: Set<string> = new Set();
 
-  updateFileStatus(publicPath: string, unusedFiles: string[], allMediaFiles: string[]) {
-    this.unusedFiles = new Set(unusedFiles.map(file => path.join(publicPath, file)));
-    this.usedFiles = new Set(allMediaFiles.filter(file => !unusedFiles.includes(file)).map(file => path.join(publicPath, file)));
-    
+  updateFileStatus(
+    publicPath: string,
+    unusedFiles: string[],
+    allMediaFiles: string[]
+  ) {
+    this.unusedFiles = new Set(
+      unusedFiles.map((file) => path.join(publicPath, file))
+    );
+    this.usedFiles = new Set(
+      allMediaFiles
+        .filter((file) => !unusedFiles.includes(file))
+        .map((file) => path.join(publicPath, file))
+    );
+
     // Trigger decoration update
     this._onDidChangeFileDecorations.fire(undefined);
   }
 
   provideFileDecoration(uri: vscode.Uri): vscode.FileDecoration | undefined {
     const filePath = uri.fsPath;
-    
+
     if (this.unusedFiles.has(filePath)) {
       return {
-        badge: "⚠",
-        tooltip: t("decoration.unused"),
-        color: new vscode.ThemeColor("errorForeground")
+        badge: '⚠',
+        tooltip: t('decoration.unused'),
+        color: new vscode.ThemeColor('errorForeground'),
       };
     }
-    
+
     if (this.usedFiles.has(filePath)) {
       return {
-        badge: "✓",
-        tooltip: t("decoration.used"),
-        color: new vscode.ThemeColor("charts.green")
+        badge: '✓',
+        tooltip: t('decoration.used'),
+        color: new vscode.ThemeColor('charts.green'),
       };
     }
-    
+
     return undefined;
   }
 }
@@ -47,7 +61,7 @@ const decorationProvider = new MediaFileDecorationProvider();
 
 export function activate(context: vscode.ExtensionContext) {
   initializeI18n();
-  console.log(t("extension.activated"));
+  console.log(t('extension.activated'));
 
   // Register file decoration provider
   context.subscriptions.push(
@@ -55,32 +69,32 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const disposable = vscode.commands.registerCommand(
-    "nextjs-unused-media-checker.checkUnusedMedia",
+    'nextjs-unused-media-checker.checkUnusedMedia',
     async () => {
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders) {
-        vscode.window.showErrorMessage(t("extension.noWorkspace"));
+        vscode.window.showErrorMessage(t('extension.noWorkspace'));
         return;
       }
 
       const rootPath = workspaceFolders[0].uri.fsPath;
       const config = vscode.workspace.getConfiguration(
-        "nextjs-unused-media-checker"
+        'nextjs-unused-media-checker'
       );
-      const publicDirName = config.get<string>("publicDirectory", "public");
+      const publicDirName = config.get<string>('publicDirectory', 'public');
       const publicPath = path.join(rootPath, publicDirName);
 
       try {
         await fsPromises.access(publicPath);
       } catch {
-        vscode.window.showErrorMessage(t("extension.noPublicDirectory"));
+        vscode.window.showErrorMessage(t('extension.noPublicDirectory'));
         return;
       }
 
       await vscode.window.withProgress(
         {
           location: vscode.ProgressLocation.Notification,
-          title: t("extension.checkingFiles"),
+          title: t('extension.checkingFiles'),
           cancellable: true,
         },
         async (progress, token) => {
@@ -93,7 +107,7 @@ export function activate(context: vscode.ExtensionContext) {
             const mediaFiles = await findMediaFiles(publicPath);
             progress.report({
               increment: 30,
-              message: t("extension.foundFiles"),
+              message: t('extension.foundFiles'),
             });
 
             if (token.isCancellationRequested) {
@@ -103,14 +117,14 @@ export function activate(context: vscode.ExtensionContext) {
             const unusedFiles = await findUnusedMediaFiles(mediaFiles, token);
             progress.report({
               increment: 70,
-              message: t("extension.analysisComplete"),
+              message: t('extension.analysisComplete'),
             });
 
             showResults(unusedFiles, publicPath, mediaFiles);
           } catch (error) {
             vscode.window.showErrorMessage(
               t(
-                "extension.errorChecking",
+                'extension.errorChecking',
                 error instanceof Error ? error.message : String(error)
               )
             );
@@ -125,26 +139,26 @@ export function activate(context: vscode.ExtensionContext) {
 
 export async function findMediaFiles(publicPath: string): Promise<string[]> {
   const config = vscode.workspace.getConfiguration(
-    "nextjs-unused-media-checker"
+    'nextjs-unused-media-checker'
   );
-  const mediaExtensions = config.get<string[]>("mediaExtensions", [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-    ".svg",
-    ".webp",
-    ".ico",
-    ".mp4",
-    ".webm",
-    ".mp3",
-    ".avif",
-    ".bmp",
-    ".tiff",
-    ".ogg",
-    ".wav",
-    ".avi",
-    ".mov",
+  const mediaExtensions = config.get<string[]>('mediaExtensions', [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.svg',
+    '.webp',
+    '.ico',
+    '.mp4',
+    '.webm',
+    '.mp3',
+    '.avif',
+    '.bmp',
+    '.tiff',
+    '.ogg',
+    '.wav',
+    '.avi',
+    '.mov',
   ]);
   const mediaFiles: string[] = [];
 
@@ -154,7 +168,7 @@ export async function findMediaFiles(publicPath: string): Promise<string[]> {
     try {
       files = await fsPromises.readdir(dirPath, { withFileTypes: true });
     } catch (error) {
-      console.warn(t("error.directoryRead", dirPath, String(error)));
+      console.warn(t('error.directoryRead', dirPath, String(error)));
       return;
     }
 
@@ -176,7 +190,7 @@ export async function findMediaFiles(publicPath: string): Promise<string[]> {
           }
         }
       } catch (error) {
-        console.warn(t("error.fileProcess", filePath, String(error)));
+        console.warn(t('error.fileProcess', filePath, String(error)));
       }
     }
   }
@@ -191,26 +205,26 @@ export async function findUnusedMediaFiles(
 ): Promise<string[]> {
   const unusedFiles = new Set(mediaFiles);
   const config = vscode.workspace.getConfiguration(
-    "nextjs-unused-media-checker"
+    'nextjs-unused-media-checker'
   );
-  const excludePatterns = config.get<string[]>("excludePatterns", [
-    "**/node_modules/**",
-    "**/build/**",
-    "**/dist/**",
-    "**/.next/**",
-    "**/out/**",
-    "**/.git/**",
-    "**/coverage/**",
-    "**/.cache/**",
+  const excludePatterns = config.get<string[]>('excludePatterns', [
+    '**/node_modules/**',
+    '**/build/**',
+    '**/dist/**',
+    '**/.next/**',
+    '**/out/**',
+    '**/.git/**',
+    '**/coverage/**',
+    '**/.cache/**',
   ]);
   const searchPatterns = [
-    "**/*.{js,jsx,ts,tsx,css,scss,sass,less,html,json,md,mdx}",
+    '**/*.{js,jsx,ts,tsx,css,scss,sass,less,html,json,md,mdx}',
     ...excludePatterns.map((pattern) => `!${pattern}`),
   ];
 
   const files = await vscode.workspace.findFiles(
     searchPatterns[0],
-    `{${searchPatterns.slice(1).join(",")}}`
+    `{${searchPatterns.slice(1).join(',')}}`
   );
 
   const totalFiles = files.length;
@@ -224,12 +238,12 @@ export async function findUnusedMediaFiles(
       mediaFile,
       path.extname(mediaFile)
     );
-    
+
     // Store various search patterns for each media file
     mediaFileMap.set(mediaFile, [
       mediaFile.toLowerCase(),
       fileName.toLowerCase(),
-      fileNameWithoutExt.toLowerCase()
+      fileNameWithoutExt.toLowerCase(),
     ]);
   }
 
@@ -243,18 +257,20 @@ export async function findUnusedMediaFiles(
     }
 
     const batch = files.slice(i, i + BATCH_SIZE);
-    
+
     await Promise.all(
       batch.map(async (file) => {
         try {
           // Skip large files
           const stats = await fsPromises.stat(file.fsPath);
           if (stats.size > MAX_FILE_SIZE) {
-            console.log(`Skipping large file: ${file.fsPath} (${stats.size} bytes)`);
+            console.log(
+              `Skipping large file: ${file.fsPath} (${stats.size} bytes)`
+            );
             return;
           }
 
-          const content = await fsPromises.readFile(file.fsPath, "utf-8");
+          const content = await fsPromises.readFile(file.fsPath, 'utf-8');
           const contentLower = content.toLowerCase();
 
           // Check each unused file
@@ -264,7 +280,9 @@ export async function findUnusedMediaFiles(
             }
 
             // Quick check for any of the search terms
-            const isUsed = searchTerms.some(term => contentLower.includes(term));
+            const isUsed = searchTerms.some((term) =>
+              contentLower.includes(term)
+            );
 
             if (isUsed) {
               // Do more detailed check only if quick check passed
@@ -273,7 +291,7 @@ export async function findUnusedMediaFiles(
                 mediaFile,
                 path.extname(mediaFile)
               );
-              
+
               const patterns = [
                 // Direct paths
                 `/${mediaFile}`,
@@ -304,7 +322,7 @@ export async function findUnusedMediaFiles(
                 `src={'/${mediaFile}'}`,
                 `src={\`/${mediaFile}\`}`,
                 `src="${mediaFile}"`,
-                `src='${mediaFile}'`
+                `src='${mediaFile}'`,
               ];
 
               const staticPatternCheck = patterns.some((pattern) => {
@@ -313,15 +331,15 @@ export async function findUnusedMediaFiles(
 
               // Dynamic pattern detection using regex
               const dynamicPatterns = [
-                new RegExp(`['"\`].*${escapeRegExp(fileName)}['"\`]`, "i"),
+                new RegExp(`['"\`].*${escapeRegExp(fileName)}['"\`]`, 'i'),
                 new RegExp(
                   `['"\`].*${escapeRegExp(fileNameWithoutExt)}.*['"\`]`,
-                  "i"
-                )
+                  'i'
+                ),
               ];
 
-              const dynamicPatternCheck = dynamicPatterns.some(
-                (regex) => regex.test(content)
+              const dynamicPatternCheck = dynamicPatterns.some((regex) =>
+                regex.test(content)
               );
 
               if (staticPatternCheck || dynamicPatternCheck) {
@@ -340,7 +358,7 @@ export async function findUnusedMediaFiles(
     // Update progress more frequently
     vscode.window.setStatusBarMessage(
       t(
-        "extension.checkingProgress",
+        'extension.checkingProgress',
         processedFiles.toString(),
         totalFiles.toString()
       ),
@@ -352,15 +370,19 @@ export async function findUnusedMediaFiles(
 }
 
 export function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function showResults(unusedFiles: string[], publicPath: string, allMediaFiles: string[]) {
+function showResults(
+  unusedFiles: string[],
+  publicPath: string,
+  allMediaFiles: string[]
+) {
   // Update file decorations
   decorationProvider.updateFileStatus(publicPath, unusedFiles, allMediaFiles);
 
   if (unusedFiles.length === 0) {
-    vscode.window.showInformationMessage(t("extension.allFilesUsed"));
+    vscode.window.showInformationMessage(t('extension.allFilesUsed'));
     return;
   }
 
@@ -376,30 +398,34 @@ function showResults(unusedFiles: string[], publicPath: string, allMediaFiles: s
   }, 0);
 
   // Show simple notification with summary
-  const message = t("extension.summaryMessage", 
-    unusedFiles.length.toString(), 
+  const message = t(
+    'extension.summaryMessage',
+    unusedFiles.length.toString(),
     formatFileSize(totalSize)
   );
-  
-  vscode.window.showInformationMessage(
-    message,
-    t("extension.openFolder")
-  ).then(selection => {
-    if (selection === t("extension.openFolder")) {
-      vscode.commands.executeCommand("revealInExplorer", vscode.Uri.file(publicPath));
-    }
-  });
-}
 
+  vscode.window
+    .showInformationMessage(message, t('extension.openFolder'))
+    .then((selection) => {
+      if (selection === t('extension.openFolder')) {
+        vscode.commands.executeCommand(
+          'revealInExplorer',
+          vscode.Uri.file(publicPath)
+        );
+      }
+    });
+}
 
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) {
-    return `0 ${t("bytes")}`;
+    return `0 ${t('bytes')}`;
   }
   const k = 1024;
-  const sizes = [t("bytes"), t("kb"), t("mb"), t("gb")];
+  const sizes = [t('bytes'), t('kb'), t('mb'), t('gb')];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-export function deactivate() {}
+export function deactivate() {
+  // Extension cleanup logic would go here if needed
+}
