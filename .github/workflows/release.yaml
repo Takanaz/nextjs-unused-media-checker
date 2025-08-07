@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
           cache: "yarn"
 
       - name: Install dependencies
@@ -75,6 +75,6 @@ jobs:
 
       - name: Publish to VS Code Marketplace
         if: steps.tag-check.outputs.exists == 'false'
-        run: npx vsce publish --no-dependencies
+        run: npx @vscode/vsce publish --no-dependencies
         env:
           VSCE_PAT: ${{ secrets.AZURE_VSCE_PAT }}
