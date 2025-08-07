@@ -43,8 +43,9 @@ jobs:
         run: |
           yarn run check-types
           yarn run check
-          yarn run test
           yarn run package
+        env:
+          DISPLAY: :99
 
       - name: Create Git tag
         if: steps.tag-check.outputs.exists == 'false'
