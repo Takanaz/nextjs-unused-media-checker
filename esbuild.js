@@ -37,16 +37,7 @@ async function main() {
     outfile: "dist/extension.js",
     external: ["vscode"],
     logLevel: "silent",
-    plugins: [
-      {
-        name: "build-notifier",
-        setup(build) {
-          build.onEnd((result) => {
-            console.log("[watch] build finished");
-          });
-        },
-      },
-    ],
+    plugins: [esbuildProblemMatcherPlugin],
   });
   if (watch) {
     await ctx.watch();
