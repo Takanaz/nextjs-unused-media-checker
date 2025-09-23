@@ -20,7 +20,7 @@ This guide provides comprehensive information for developers who want to contrib
 ### Required Software
 
 - **Node.js**: Version 18 or higher
-- **npm**: Latest version (comes with Node.js)
+- **yarn**: Latest version (comes with Node.js)
 - **VS Code**: Latest version
 - **Git**: For version control
 
@@ -44,26 +44,26 @@ cd nextjs-unused-media-checker
 ### 2. Install Dependencies
 
 ```bash
-npm install
+yarn install
 ```
 
 ### 3. Initial Build
 
 ```bash
-npm run compile
+yarn run compile
 ```
 
 ### 4. Verify Setup
 
 ```bash
 # Run type checking
-npm run check-types
+yarn run check-types
 
 # Run code quality checks
-npm run check
+yarn run check
 
 # Run tests
-npm test
+yarn test
 ```
 
 ## Development Workflow
@@ -72,10 +72,11 @@ npm test
 
 ```bash
 # Start watch mode for automatic rebuilding
-npm run watch
+yarn run watch
 ```
 
 This command runs multiple watchers in parallel:
+
 - `esbuild` watcher for TypeScript compilation
 - TypeScript compiler for type checking
 
@@ -90,29 +91,29 @@ This command runs multiple watchers in parallel:
 
 ```bash
 # Build for development
-npm run compile
+yarn run compile
 
 # Build for production
-npm run package
+yarn run package
 
 # Type checking only
-npm run check-types
+yarn run check-types
 
 # Code quality check (lint + format)
-npm run check
+yarn run check
 
 # Auto-fix code quality issues
-npm run check:fix
+yarn run check:fix
 
 # Format code only
-npm run format
-npm run format:fix
+yarn run format
+yarn run format:fix
 
 # Run all tests
-npm test
+yarn test
 
 # Create VSIX package
-npm run package
+yarn run package
 ```
 
 ## Architecture Overview
@@ -138,17 +139,20 @@ images/                  # Extension assets
 ### Key Components
 
 #### Extension Activation
+
 - **Entry Point**: `src/extension.ts`
 - **Activation Events**: `workspaceContains:**/package.json`
 - **Commands**: `nextjs-unused-media-checker.checkUnusedMedia`
 
 #### Core Functionality
+
 - **Media Detection**: Scans public directory for media files
 - **Usage Analysis**: Searches source files for media references
 - **File Decorations**: Shows status in VS Code Explorer
 - **Pattern Matching**: Supports various import/reference patterns
 
 #### Internationalization
+
 - **Supported Languages**: English, Japanese
 - **Implementation**: Dynamic loading based on VS Code language
 - **Files**: `package.nls.json`, `package.nls.ja.json`
@@ -162,17 +166,20 @@ Tests are located in `src/test/extension.test.ts` and use the Mocha framework.
 ### Test Categories
 
 1. **Media File Detection Tests**
+
    - Various file format support
    - Subdirectory handling
    - Symbolic link handling
 
 2. **Usage Detection Tests**
+
    - Direct file references
    - CSS `url()` patterns
    - Next.js Image components
    - Case-insensitive matching
 
 3. **Configuration Tests**
+
    - Custom media extensions
    - Exclude patterns
    - Public directory configuration
@@ -185,20 +192,20 @@ Tests are located in `src/test/extension.test.ts` and use the Mocha framework.
 
 ```bash
 # Run all tests
-npm test
+yarn test
 
 # Run tests in watch mode
-npm run watch-tests
+yarn run watch-tests
 
 # Compile tests only
-npm run compile-tests
+yarn run compile-tests
 ```
 
 ### Writing Tests
 
 ```typescript
-suite('Your Test Suite', () => {
-  test('should do something', async () => {
+suite("Your Test Suite", () => {
+  test("should do something", async () => {
     // Setup test environment
     // Execute functionality
     // Assert results
@@ -211,10 +218,11 @@ suite('Your Test Suite', () => {
 ### Development Build
 
 ```bash
-npm run compile
+yarn run compile
 ```
 
 This creates a development build with:
+
 - Source maps enabled
 - No minification
 - Fast compilation
@@ -222,10 +230,11 @@ This creates a development build with:
 ### Production Build
 
 ```bash
-npm run package
+yarn run package
 ```
 
 This creates a production build with:
+
 - Minification enabled
 - Source maps disabled
 - Optimized for size
@@ -234,7 +243,7 @@ This creates a production build with:
 
 ```bash
 # Ensure you have vsce installed globally
-npm install -g vsce
+yarn add -G vsce
 
 # Create package
 vsce package
@@ -265,7 +274,7 @@ The `.vscode/launch.json` should contain:
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "${workspaceFolder}/npm: watch"
+      "preLaunchTask": "${workspaceFolder}/yarn: watch"
     }
   ]
 }
@@ -276,10 +285,12 @@ The `.vscode/launch.json` should contain:
 Use the extension's output channel:
 
 ```typescript
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-const outputChannel = vscode.window.createOutputChannel('Next.js Unused Media Checker');
-outputChannel.appendLine('Debug message');
+const outputChannel = vscode.window.createOutputChannel(
+  "Next.js Unused Media Checker"
+);
+outputChannel.appendLine("Debug message");
 outputChannel.show();
 ```
 
@@ -300,7 +311,7 @@ The project uses Biome for linting and formatting. Configuration is in `biome.js
 
 ```bash
 # Install lefthook if not already installed
-npm install -g lefthook
+yarn add -G lefthook
 
 # Install hooks
 lefthook install
@@ -329,8 +340,8 @@ This ensures code quality checks run before commits.
 
 ```bash
 # Build and test
-npm run package
-npm test
+yarn run package
+yarn test
 
 # Create and push tag
 git tag -a v0.1.1 -m "Release version 0.1.1"
@@ -354,32 +365,36 @@ vsce publish
 ### Common Issues
 
 #### Extension Not Loading
+
 ```bash
 # Check compilation
-npm run compile
+yarn run compile
 
 # Check for TypeScript errors
-npm run check-types
+yarn run check-types
 ```
 
 #### Tests Failing
+
 ```bash
 # Ensure test compilation
-npm run compile-tests
+yarn run compile-tests
 
 # Check test environment
-npm run pretest
+yarn run pretest
 ```
 
 #### Package Build Fails
+
 ```bash
 # Clean and rebuild
 rm -rf dist/ out/
-npm run compile
-npm run package
+yarn run compile
+yarn run package
 ```
 
 #### VS Code Integration Issues
+
 ```bash
 # Reload VS Code window
 # Command Palette: "Developer: Reload Window"

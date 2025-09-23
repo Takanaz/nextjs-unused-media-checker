@@ -2,6 +2,10 @@
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.3]
+
+- Ensure that VSCode-compatible editors reliably open the public folder
+
 ## [0.1.2]
 
 - Fixed GitHub Actions workflow for automated publishing
