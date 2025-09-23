@@ -8,7 +8,7 @@ export const ja = {
   'extension.foundFiles': 'メディアファイルを発見しました...',
   'extension.analysisComplete': '解析完了！',
   'extension.allFilesUsed':
-    'publicディレクトリ内のすべてのメディアファイルが使用されています！',
+    'publicディレクトリ内のすべてのメディアファイルが使用されています',
   'extension.errorChecking':
     '未使用メディアチェック中にエラーが発生しました: {0}',
   'extension.unableToOpenFile': 'ファイルを開けません: {0}',

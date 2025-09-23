@@ -406,12 +406,30 @@ function showResults(
 
   vscode.window
     .showInformationMessage(message, t('extension.openFolder'))
-    .then((selection) => {
+    .then(async (selection) => {
       if (selection === t('extension.openFolder')) {
-        vscode.commands.executeCommand(
-          'revealInExplorer',
-          vscode.Uri.file(publicPath)
-        );
+        try {
+          await vscode.commands.executeCommand('workbench.view.explorer');
+        } catch (_ignoredError) {
+          // Intentionally ignore; fallbacks handle next step.
+        }
+        try {
+          await vscode.commands.executeCommand(
+            'revealInExplorer',
+            vscode.Uri.file(publicPath)
+          );
+        } catch (_ignoredError) {
+          // Intentionally ignore; try OS-level reveal next.
+          try {
+            await vscode.commands.executeCommand(
+              'revealFileInOS',
+              vscode.Uri.file(publicPath)
+            );
+          } catch (_ignoredError) {
+            // Final fallback: open via OS default handler.
+            await vscode.env.openExternal(vscode.Uri.file(publicPath));
+          }
+        }
       }
     });
 }
