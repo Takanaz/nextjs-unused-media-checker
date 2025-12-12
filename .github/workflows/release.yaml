@@ -84,6 +84,11 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.AZURE_VSCE_PAT }}
 
+      - name: Patch publisher for Open VSX
+        if: steps.tag-check.outputs.exists == 'false'
+        run: |
+          node -e "const fs=require('fs'); const pkg=require('./package.json'); pkg.publisher='takanaz'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');"
+
       - name: Publish to Open VSX Registry
         if: steps.tag-check.outputs.exists == 'false'
         run: pnpm run ovsx:publish
