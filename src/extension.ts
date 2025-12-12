@@ -222,14 +222,47 @@ export async function findUnusedMediaFiles(
     '**/coverage/**',
     '**/.cache/**',
   ]);
-  const searchPatterns = [
-    '**/*.{js,jsx,ts,tsx,css,scss,sass,less,html,json,md,mdx}',
-    ...excludePatterns.map((pattern) => `!${pattern}`),
-  ];
+
+  // Read text files via VS Code FS first (supports remote/virtual workspaces).
+  // VS Code のファイルシステムAPIを優先して読み込み（リモート/仮想ワークスペース対応）
+  async function readTextFile(uri: vscode.Uri): Promise<string> {
+    try {
+      const bytes = await vscode.workspace.fs.readFile(uri);
+      return new TextDecoder('utf-8').decode(bytes);
+    } catch {
+      // Fallback for environments/tests that only provide fsPath
+      // fsPath しか無い環境/テスト用のフォールバック
+      return await fsPromises.readFile(uri.fsPath, 'utf-8');
+    }
+  }
+
+  // Get file size in a workspace-friendly way.
+  // ワークスペース上で安全にファイルサイズを取得
+  async function getFileSize(uri: vscode.Uri): Promise<number> {
+    try {
+      const stat = await vscode.workspace.fs.stat(uri);
+      return stat.size;
+    } catch {
+      const stat = await fsPromises.stat(uri.fsPath);
+      return stat.size;
+    }
+  }
+
+  const includePattern =
+    '**/*.{js,jsx,ts,tsx,css,scss,sass,less,html,json,md,mdx}';
+  const normalizedExcludePatterns = excludePatterns.map((p) =>
+    p.startsWith('!') ? p.slice(1) : p
+  );
+  const excludePattern =
+    normalizedExcludePatterns.length > 0
+      ? `{${normalizedExcludePatterns.join(',')}}`
+      : undefined;
 
   const files = await vscode.workspace.findFiles(
-    searchPatterns[0],
-    `{${searchPatterns.slice(1).join(',')}}`
+    includePattern,
+    excludePattern,
+    undefined,
+    token
   );
 
   const totalFiles = files.length;
@@ -308,15 +341,13 @@ export async function findUnusedMediaFiles(
         try {
           // Skip large files
           // 大きなファイルはスキップ
-          const stats = await fsPromises.stat(file.fsPath);
-          if (stats.size > MAX_FILE_SIZE) {
-            console.log(
-              `Skipping large file: ${file.fsPath} (${stats.size} bytes)`
-            );
+          const size = await getFileSize(file);
+          if (size > MAX_FILE_SIZE) {
+            console.log(`Skipping large file: ${file.fsPath} (${size} bytes)`);
             return;
           }
 
-          const content = await fsPromises.readFile(file.fsPath, 'utf-8');
+          const content = await readTextFile(file);
 
           // Extract candidates from url() and string literals, then match against indexes.
           // url() や文字列リテラルから候補を抽出し、インデックスと照合

@@ -185,7 +185,7 @@ suite('Extension Test Suite', () => {
       // vscode.workspace.findFiles をモック
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'component.tsx') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'component.tsx')),
       ];
 
       // Mock vscode.workspace.getConfiguration
@@ -227,7 +227,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'styles.css') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'styles.css')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -269,7 +269,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'styles2.css') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'styles2.css')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -305,7 +305,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'hero.tsx') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'hero.tsx')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -340,7 +340,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'index.html') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'index.html')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -383,7 +383,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'not-a-reference.ts') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'not-a-reference.ts')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -457,7 +457,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'component.jsx') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'component.jsx')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -513,7 +513,7 @@ suite('Extension Test Suite', () => {
     test('should handle file read errors gracefully', async () => {
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: '/nonexistent/file.js' } as vscode.Uri,
+        vscode.Uri.file('/nonexistent/file.js'),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -555,7 +555,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'test.js') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'test.js')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
