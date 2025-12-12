@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import { initializeI18n, t } from './i18n';
 
 // File decoration provider for unused media files
+// 未使用メディアファイルに対してエクスプローラー上のデコレーションを提供
 class MediaFileDecorationProvider implements vscode.FileDecorationProvider {
   private _onDidChangeFileDecorations: vscode.EventEmitter<
     vscode.Uri | vscode.Uri[] | undefined
@@ -31,6 +32,7 @@ class MediaFileDecorationProvider implements vscode.FileDecorationProvider {
     );
 
     // Trigger decoration update
+    // デコレーション更新イベントを発火して表示を更新
     this._onDidChangeFileDecorations.fire(undefined);
   }
 
@@ -64,6 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(t('extension.activated'));
 
   // Register file decoration provider
+  // ファイルデコレーションプロバイダーを登録
   context.subscriptions.push(
     vscode.window.registerFileDecorationProvider(decorationProvider)
   );
@@ -100,6 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
         async (progress, token) => {
           try {
             // Check for cancellation
+            // ユーザーによるキャンセルで中断
             if (token.isCancellationRequested) {
               return;
             }
@@ -178,6 +182,7 @@ export async function findMediaFiles(publicPath: string): Promise<string[]> {
       try {
         if (file.isDirectory()) {
           // Check if it's a symbolic link
+          // シンボリックリンクかどうかの判定
           const stats = await fsPromises.lstat(filePath);
           if (!stats.isSymbolicLink()) {
             await scanDirectory(filePath);
@@ -231,6 +236,7 @@ export async function findUnusedMediaFiles(
   let processedFiles = 0;
 
   // Create a map for faster lookups
+  // 参照検出を高速化するためのマッピング
   const mediaFileMap = new Map<string, string[]>();
   for (const mediaFile of mediaFiles) {
     const fileName = path.basename(mediaFile);
@@ -240,6 +246,7 @@ export async function findUnusedMediaFiles(
     );
 
     // Store various search patterns for each media file
+    // メディアファイルごとに複数の検索パターンを保持
     mediaFileMap.set(mediaFile, [
       mediaFile.toLowerCase(),
       fileName.toLowerCase(),
@@ -248,6 +255,7 @@ export async function findUnusedMediaFiles(
   }
 
   // Process files in batches for better performance
+  // パフォーマンス向上のためにファイルをバッチ処理
   const BATCH_SIZE = 20;
   const MAX_FILE_SIZE = 1024 * 1024; // 1MB limit for files to process
 
@@ -262,6 +270,7 @@ export async function findUnusedMediaFiles(
       batch.map(async (file) => {
         try {
           // Skip large files
+          // 大きなファイルはスキップ
           const stats = await fsPromises.stat(file.fsPath);
           if (stats.size > MAX_FILE_SIZE) {
             console.log(
@@ -274,18 +283,21 @@ export async function findUnusedMediaFiles(
           const contentLower = content.toLowerCase();
 
           // Check each unused file
+          // 未使用候補の各メディアファイルについて参照有無を確認
           for (const [mediaFile, searchTerms] of mediaFileMap.entries()) {
             if (!unusedFiles.has(mediaFile)) {
               continue; // Already found to be used
             }
 
             // Quick check for any of the search terms
+            // 検索語の簡易チェック（早期判定）
             const isUsed = searchTerms.some((term) =>
               contentLower.includes(term)
             );
 
             if (isUsed) {
               // Do more detailed check only if quick check passed
+              // 簡易チェックに引っかかった場合のみ詳細チェック
               const fileName = path.basename(mediaFile);
               const fileNameWithoutExt = path.basename(
                 mediaFile,
@@ -294,23 +306,28 @@ export async function findUnusedMediaFiles(
 
               const patterns = [
                 // Direct paths
+                // 先頭スラッシュ付きの直接パス
                 `/${mediaFile}`,
                 `"/${mediaFile}"`,
                 `'/${mediaFile}'`,
                 `\`/${mediaFile}\``,
                 // Without leading slash
+                // 先頭スラッシュなしのパス
                 mediaFile,
                 `"${mediaFile}"`,
                 `'${mediaFile}'`,
                 `\`${mediaFile}\``,
                 // Just filename
+                // ファイル名のみ
                 fileName,
                 `"${fileName}"`,
                 `'${fileName}'`,
                 `\`${fileName}\``,
                 // Filename without extension
+                // 拡張子なしのファイル名
                 fileNameWithoutExt,
                 // CSS url() patterns
+                // CSSの url() パターン
                 `url(/${mediaFile})`,
                 `url("/${mediaFile}")`,
                 `url('/${mediaFile}')`,
@@ -318,6 +335,7 @@ export async function findUnusedMediaFiles(
                 `url("${mediaFile}")`,
                 `url('${mediaFile}')`,
                 // Next.js Image component patterns
+                // Next.js Imageコンポーネントの参照パターン
                 `src={"/${mediaFile}"}`,
                 `src={'/${mediaFile}'}`,
                 `src={\`/${mediaFile}\`}`,
@@ -330,6 +348,7 @@ export async function findUnusedMediaFiles(
               });
 
               // Dynamic pattern detection using regex
+              // 正規表現で動的参照っぽい記述も検出
               const dynamicPatterns = [
                 new RegExp(`['"\`].*${escapeRegExp(fileName)}['"\`]`, 'i'),
                 new RegExp(
@@ -356,6 +375,7 @@ export async function findUnusedMediaFiles(
     processedFiles += batch.length;
 
     // Update progress more frequently
+    // 進捗表示をより高頻度で更新
     vscode.window.setStatusBarMessage(
       t(
         'extension.checkingProgress',
@@ -379,6 +399,7 @@ function showResults(
   allMediaFiles: string[]
 ) {
   // Update file decorations
+  // 検出結果に基づいてファイルデコレーションを更新
   decorationProvider.updateFileStatus(publicPath, unusedFiles, allMediaFiles);
 
   if (unusedFiles.length === 0) {
@@ -387,6 +408,7 @@ function showResults(
   }
 
   // Calculate total size
+  // 未使用ファイルの合計サイズを計算
   const totalSize = unusedFiles.reduce((sum, file) => {
     const filePath = path.join(publicPath, file);
     try {
@@ -398,6 +420,7 @@ function showResults(
   }, 0);
 
   // Show simple notification with summary
+  // 概要（件数・容量）を通知で表示
   const message = t(
     'extension.summaryMessage',
     unusedFiles.length.toString(),
@@ -412,6 +435,7 @@ function showResults(
           await vscode.commands.executeCommand('workbench.view.explorer');
         } catch (_ignoredError) {
           // Intentionally ignore; fallbacks handle next step.
+          // ここは失敗しても後続のフォールバックで対応するため無視する
         }
         try {
           await vscode.commands.executeCommand(
@@ -420,6 +444,7 @@ function showResults(
           );
         } catch (_ignoredError) {
           // Intentionally ignore; try OS-level reveal next.
+          // ここは失敗してもOS側で開くフォールバックを試すため無視する
           try {
             await vscode.commands.executeCommand(
               'revealFileInOS',
@@ -427,6 +452,7 @@ function showResults(
             );
           } catch (_ignoredError) {
             // Final fallback: open via OS default handler.
+            // 最後の手段としてOS既定のハンドラで開く
             await vscode.env.openExternal(vscode.Uri.file(publicPath));
           }
         }
@@ -446,4 +472,5 @@ export function formatFileSize(bytes: number): string {
 
 export function deactivate() {
   // Extension cleanup logic would go here if needed
+  // 拡張機能のクリーンアップ処理（必要になったら実装）
 }
