@@ -18,8 +18,8 @@ A powerful **VS Code extension** that automatically detects unused media files i
 ## Key Features
 
 - **Visual File Decorations**: Instantly see unused (!) and used (✓) media files directly in the Explorer
-- **High Performance**: Parallel processing with smart batching for large projects
-- **Smart Detection**: Finds references in JS/TS, CSS, HTML, JSON, and Markdown files
+- **High Performance**: Smart batching + candidate extraction from `url()` and string literals for large projects
+- **Smart Detection**: Finds references in JS/TS, CSS, HTML, JSON, and Markdown files (query/hash in URLs supported)
 - **Multilingual**: English and Japanese interface support
 - **Highly Configurable**: Customize file types, exclude patterns, and directories
 - **Zero Dependencies**: No external services - all processing happens locally
@@ -103,7 +103,7 @@ Customize the extension behavior via VS Code settings (`Settings` → search "ne
 
 - **Parallel Processing**: Batch processing with Promise.all for maximum speed
 - **Smart Filtering**: Skips large files (>1MB) automatically
-- **Optimized Data Structures**: Set/Map usage for O(1) lookups
+- **Optimized Data Structures**: Set/Map usage for O(1) lookups, and workspace-friendly file IO
 - **Cancellable Operations**: User can stop long-running scans
 - **Memory Efficient**: Processes files in small batches
 
