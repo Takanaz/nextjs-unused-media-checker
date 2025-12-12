@@ -24,10 +24,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "yarn"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Get package version
         id: package-version
@@ -45,9 +50,9 @@ jobs:
       - name: Run tests and build
         if: steps.tag-check.outputs.exists == 'false'
         run: |
-          yarn run check-types
-          yarn run check
-          yarn run package
+          pnpm run check-types
+          pnpm run check
+          pnpm run package
         env:
           DISPLAY: :99
 
@@ -75,12 +80,12 @@ jobs:
 
       - name: Publish to VS Code Marketplace
         if: steps.tag-check.outputs.exists == 'false'
-        run: npx @vscode/vsce publish --no-dependencies
+        run: pnpm dlx @vscode/vsce publish --no-dependencies
         env:
           VSCE_PAT: ${{ secrets.AZURE_VSCE_PAT }}
 
       - name: Publish to Open VSX Registry
         if: steps.tag-check.outputs.exists == 'false'
-        run: yarn run ovsx:publish
+        run: pnpm run ovsx:publish
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}

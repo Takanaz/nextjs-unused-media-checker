@@ -24,24 +24,24 @@ Thank you for your interest in contributing to this project!
 2. **Install Dependencies**
 
    ```bash
+   pnpm install
+   # or (if you don't use pnpm)
    npm install
-   # or
-   yarn install
    ```
 
 3. **Start Development**
 
    ```bash
-   npm run watch
+   pnpm run watch
    # or
-   yarn run watch
+   npm run watch
    ```
 
 4. **Run Tests**
    ```bash
-   npm test
+   pnpm test
    # or
-   yarn test
+   npm test
    ```
 
 ## Development Workflow
@@ -50,24 +50,24 @@ Thank you for your interest in contributing to this project!
 
 ```bash
 # Development build
-npm run compile
+pnpm run compile
 
 # Production build
-npm run package
+pnpm run package
 
 # Type checking
-npm run check-types
+pnpm run check-types
 
 # Code checking and formatting
-npm run check
-npm run check:fix
+pnpm run check
+pnpm run check:fix
 ```
 
 ### Testing Extension
 
 ```bash
 # Create VSIX package
-npm run package
+pnpm run package
 vsce package
 
 # Install locally
