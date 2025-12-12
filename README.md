@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/visual-studio-marketplace/v/Takanaz.nextjs-unused-media-checker?style=for-the-badge&logo=visual-studio-code" alt="Version">
   <img src="https://img.shields.io/visual-studio-marketplace/d/Takanaz.nextjs-unused-media-checker?style=for-the-badge" alt="Downloads">
   <img src="https://img.shields.io/github/license/Takanaz/nextjs-unused-media-checker?style=for-the-badge" alt="License">
-  <a href="https://open-vsx.org/extension/takanaz/nextjs-unused-media-checker"><img src="https://img.shields.io/open-vsx/v/takanaz/nextjs-unused-media-checker?label=Open%20VSX&style=for-the-badge" alt="Open VSX"></a>
+  <a href="https://open-vsx.org/extension/Takanaz/nextjs-unused-media-checker"><img src="https://img.shields.io/open-vsx/v/Takanaz/nextjs-unused-media-checker?label=Open%20VSX&style=for-the-badge" alt="Open VSX"></a>
 </p>
 
 <p align="center"> 
@@ -35,7 +35,7 @@ A powerful **VS Code extension** that automatically detects unused media files i
 ### Installation
 
 1. Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Takanaz.nextjs-unused-media-checker)
-2. Or install from [Open VSX Registry](https://open-vsx.org/extension/takanaz/nextjs-unused-media-checker) (for Cursor, VSCodium, etc.)
+2. Or install from [Open VSX Registry](https://open-vsx.org/extension/Takanaz/nextjs-unused-media-checker) (for Cursor, VSCodium, etc.)
 3. Or search "Next.js Unused Media Checker" in the Extensions tab
 
 ### Usage
