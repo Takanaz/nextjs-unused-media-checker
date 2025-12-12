@@ -1,5 +1,7 @@
 # Developer Guide
 
+English | [日本語](DEVELOPER.ja.md)
+
 This guide provides comprehensive information for developers who want to contribute to or understand the Next.js Unused Media Checker extension.
 
 ## Table of Contents
@@ -250,6 +252,29 @@ vsce package
 
 # This creates: nextjs-unused-media-checker-X.X.X.vsix
 ```
+
+### Open VSX (for Cursor/VSCodium, etc.) Packaging/Publishing
+
+To publish to Open VSX Registry, use the `ovsx` CLI.
+
+```bash
+# Prerequisite: create an Open VSX Personal Access Token and set it as an env var
+export OVSX_PAT=your_open_vsx_personal_access_token
+
+# Create a package (optional)
+yarn run ovsx:package
+
+# Publish
+yarn run ovsx:publish
+
+# Or run build -> publish in one go
+yarn run release:ovsx
+```
+
+Notes:
+
+- The Open VSX extension ID is typically `publisher.name`. For this project: `Takanaz.nextjs-unused-media-checker`.
+- The `publisher` must exist on Open VSX. If you haven't created it yet, create an organization/publisher on Open VSX and ensure your account has permission to publish under it.
 
 ## Debugging
 

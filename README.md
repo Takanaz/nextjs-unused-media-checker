@@ -4,6 +4,7 @@
   <img src="https://img.shields.io/visual-studio-marketplace/v/Takanaz.nextjs-unused-media-checker?style=for-the-badge&logo=visual-studio-code" alt="Version">
   <img src="https://img.shields.io/visual-studio-marketplace/d/Takanaz.nextjs-unused-media-checker?style=for-the-badge" alt="Downloads">
   <img src="https://img.shields.io/github/license/Takanaz/nextjs-unused-media-checker?style=for-the-badge" alt="License">
+  <a href="https://open-vsx.org/extension/takanaz/nextjs-unused-media-checker"><img src="https://img.shields.io/open-vsx/v/takanaz/nextjs-unused-media-checker?label=Open%20VSX&style=for-the-badge" alt="Open VSX"></a>
 </p>
 
 <p align="center"> 
@@ -34,7 +35,8 @@ A powerful **VS Code extension** that automatically detects unused media files i
 ### Installation
 
 1. Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Takanaz.nextjs-unused-media-checker)
-2. Or search "Next.js Unused Media Checker" in VS Code Extensions tab
+2. Or install from [Open VSX Registry](https://open-vsx.org/extension/takanaz/nextjs-unused-media-checker) (for Cursor, VSCodium, etc.)
+3. Or search "Next.js Unused Media Checker" in the Extensions tab
 
 ### Usage
 
@@ -109,7 +111,7 @@ Customize the extension behavior via VS Code settings (`Settings` → search "ne
 
 Interested in contributing? Check out our development resources:
 
-- **[Developer Guide](DEVELOPER.md)** - Comprehensive development setup and workflow
-- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project
+- **[Developer Guide](DEVELOPER.md)** - Comprehensive development setup and workflow (also available in Japanese: [DEVELOPER.ja.md](DEVELOPER.ja.md))
+- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project (also available in Japanese: [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md))
 
 For a quick start, see the [Environment Setup](DEVELOPER.md#environment-setup) section in the Developer Guide.
