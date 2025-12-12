@@ -1,5 +1,7 @@
 # Developer Guide
 
+English | [日本語](DEVELOPER.ja.md)
+
 This guide provides comprehensive information for developers who want to contribute to or understand the Next.js Unused Media Checker extension.
 
 ## Table of Contents

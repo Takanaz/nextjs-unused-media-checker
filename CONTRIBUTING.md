@@ -1,8 +1,10 @@
 # Contributing to Next.js Unused Media Checker
 
-Thank you for your interest in contributing to this project! 🎉
+English | [日本語](CONTRIBUTING.ja.md)
 
-## 🚀 Getting Started
+Thank you for your interest in contributing to this project!
+
+## Getting Started
 
 ### Prerequisites
 
@@ -42,7 +44,7 @@ Thank you for your interest in contributing to this project! 🎉
    yarn test
    ```
 
-## 🛠️ Development Workflow
+## Development Workflow
 
 ### Building
 
@@ -72,7 +74,7 @@ vsce package
 code --install-extension nextjs-unused-media-checker-*.vsix
 ```
 
-## 📋 Contributing Guidelines
+## Contributing Guidelines
 
 ### Code Style
 
@@ -126,7 +128,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 - `test:` - Adding tests
 - `chore:` - Maintenance tasks
 
-## 🐛 Reporting Issues
+## Reporting Issues
 
 ### Bug Reports
 
@@ -146,27 +148,27 @@ Use our [feature request template](.github/ISSUE_TEMPLATE/feature_request.md) an
 - Use case and motivation
 - Proposed implementation (if any)
 
-## 📝 Areas for Contribution
+## Areas for Contribution
 
 ### High Priority
 
-- 🔍 **Detection Patterns**: Improve media file usage detection
-- 🚀 **Performance**: Optimize scanning for large projects
-- 🌐 **i18n**: Add more language translations
-- 🧪 **Testing**: Increase test coverage
+- **Detection Patterns**: Improve media file usage detection
+- **Performance**: Optimize scanning for large projects
+- **i18n**: Add more language translations
+- **Testing**: Increase test coverage
 
 ### Medium Priority
 
-- 📱 **Framework Support**: Support for other frameworks
-- 🎨 **UI/UX**: Improve user interface and experience
-- 📊 **Analytics**: Better reporting and statistics
-- ⚙️ **Configuration**: More customization options
+- **Framework Support**: Support for other frameworks
+- **UI/UX**: Improve user interface and experience
+- **Analytics**: Better reporting and statistics
+- **Configuration**: More customization options
 
 ### Good First Issues
 
 Look for issues labeled `good first issue` - these are perfect for new contributors!
 
-## 🤝 Code of Conduct
+## Code of Conduct
 
 ### Our Standards
 
@@ -179,13 +181,13 @@ Look for issues labeled `good first issue` - these are perfect for new contribut
 
 Project maintainers are responsible for clarifying standards and will take appropriate action for unacceptable behavior.
 
-## 📞 Getting Help
+## Getting Help
 
-- 💬 **Issues**: For bugs and feature requests
-- 📧 **Email**: takanaz.dev@gmail.com for security issues
-- 📖 **Documentation**: Check README.md first
+- **Issues**: For bugs and feature requests
+- **Email**: takanaz.dev@gmail.com for security issues
+- **Documentation**: Check README.md first
 
-## 🙏 Recognition
+## Recognition
 
 Contributors will be:
 
@@ -193,4 +195,4 @@ Contributors will be:
 - Mentioned in release notes
 - Given credit in commit messages
 
-Thank you for contributing to make Next.js development more efficient! 🚀
+Thank you for contributing to make Next.js development more efficient!

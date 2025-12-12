@@ -1,4 +1,6 @@
-# Change Log
+# Changelog
+
+English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
@@ -6,6 +8,7 @@ All notable changes to the "nextjs-unused-media-checker" extension will be docum
 
 - Ensure that VSCode-compatible editors reliably open the public folder
 - Add publishing support for Open VSX Registory (ovsx)
+- Expand Japanese documentation (add Japanese versions of docs and cross-links)
 
 ## [0.1.2]
 

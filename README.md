@@ -111,7 +111,7 @@ Customize the extension behavior via VS Code settings (`Settings` → search "ne
 
 Interested in contributing? Check out our development resources:
 
-- **[Developer Guide](DEVELOPER.md)** - Comprehensive development setup and workflow
-- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project
+- **[Developer Guide](DEVELOPER.md)** - Comprehensive development setup and workflow (also available in Japanese: [DEVELOPER.ja.md](DEVELOPER.ja.md))
+- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project (also available in Japanese: [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md))
 
 For a quick start, see the [Environment Setup](DEVELOPER.md#environment-setup) section in the Developer Guide.
