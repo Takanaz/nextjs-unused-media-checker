@@ -4,6 +4,11 @@
 
 このファイルには、拡張機能「nextjs-unused-media-checker」の主な変更点を記録します。
 
+## [0.1.5]
+
+- npm/yarn から pnpm へ移行（CI 含む）
+- セキュリティ: glob CLI のコマンドインジェクション脆弱性に対応（pnpm overrides により glob@10.5.0 に固定）
+
 ## [0.1.4]
 
 - Open VSX Registry（ovsx）への公開に対応
