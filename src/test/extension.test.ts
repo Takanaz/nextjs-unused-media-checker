@@ -254,6 +254,41 @@ suite('Extension Test Suite', () => {
       }
     });
 
+    test('should detect references with query/hash and unquoted url()', async () => {
+      await fsPromises.writeFile(
+        path.join(publicDir, 'asset.png'),
+        'test content'
+      );
+
+      const cssContent = `
+        .hero {
+          background-image: url(/asset.png?v=1#hash);
+        }
+      `;
+      await fsPromises.writeFile(path.join(srcDir, 'styles2.css'), cssContent);
+
+      const originalFindFiles = vscode.workspace.findFiles;
+      vscode.workspace.findFiles = async () => [
+        { fsPath: path.join(srcDir, 'styles2.css') } as vscode.Uri,
+      ];
+
+      const originalGetConfiguration = vscode.workspace.getConfiguration;
+      vscode.workspace.getConfiguration = () => createMockConfig();
+
+      try {
+        const { findUnusedMediaFiles } = await import('../extension.js');
+        const mockToken = {
+          isCancellationRequested: false,
+        } as vscode.CancellationToken;
+        const result = await findUnusedMediaFiles(['asset.png'], mockToken);
+
+        assert.strictEqual(result.length, 0);
+      } finally {
+        vscode.workspace.findFiles = originalFindFiles;
+        vscode.workspace.getConfiguration = originalGetConfiguration;
+      }
+    });
+
     test('should detect Next.js Image component references', async () => {
       await fsPromises.writeFile(
         path.join(publicDir, 'hero.png'),
@@ -336,6 +371,7 @@ suite('Extension Test Suite', () => {
       );
 
       // Filename stem appears in code, but not as a path/string reference.
+      // ファイル名のstem（拡張子なし部分）がコードに出ても、パス/文字列参照でなければ「使用中」扱いしないことを確認
       const sourceContent = `
         export const hero = { title: "Hello" };
         export function getHero() { return hero; }

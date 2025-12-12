@@ -235,18 +235,60 @@ export async function findUnusedMediaFiles(
   const totalFiles = files.length;
   let processedFiles = 0;
 
-  // Create a map for faster lookups
-  // 参照検出を高速化するためのマッピング
-  const mediaFileMap = new Map<string, string[]>();
-  for (const mediaFile of mediaFiles) {
-    const fileName = path.basename(mediaFile);
+  // Build indexes for fast lookups
+  // 高速化のためのインデックス（パス一致 / basename一致）を作成
+  const mediaByPathLower = new Map<string, string>();
+  const mediaByBasenameLower = new Map<string, string[]>();
 
-    // Store various search patterns for each media file
-    // メディアファイルごとに複数の検索パターンを保持
-    mediaFileMap.set(mediaFile, [
-      mediaFile.toLowerCase(),
-      fileName.toLowerCase(),
-    ]);
+  for (const mediaFile of mediaFiles) {
+    const normalized = mediaFile.replace(/\\/g, '/');
+    const key = normalized.toLowerCase();
+    mediaByPathLower.set(key, mediaFile);
+
+    const base = path.posix.basename(normalized).toLowerCase();
+    const list = mediaByBasenameLower.get(base) ?? [];
+    list.push(mediaFile);
+    mediaByBasenameLower.set(base, list);
+  }
+
+  const EXTERNAL_URL_RE = /^(?:[a-z][a-z0-9+.-]*:)?\/\//i;
+  const DATA_URL_RE = /^data:/i;
+
+  function normalizeCandidate(raw: string): string | null {
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      return null;
+    }
+    if (EXTERNAL_URL_RE.test(trimmed) || DATA_URL_RE.test(trimmed)) {
+      return null;
+    }
+
+    // Normalize slashes, strip query/hash, and remove leading prefixes
+    // パスの区切りを統一し、クエリ/ハッシュを除去し、先頭のプレフィックス除去
+    let value = trimmed.replace(/\\/g, '/');
+    value = value.split('?')[0]?.split('#')[0] ?? value;
+    value = value.replace(/^\.\/+/, '');
+    value = value.replace(/^\/+/, '');
+    value = value.replace(/^public\/+/, '');
+
+    value = value.trim();
+    return value ? value.toLowerCase() : null;
+  }
+
+  function markUsedByCandidate(candidateLower: string) {
+    const direct = mediaByPathLower.get(candidateLower);
+    if (direct) {
+      unusedFiles.delete(direct);
+      return;
+    }
+
+    // basename-only references can be ambiguous. Only mark used if unique.
+    // ファイル名のみの参照は曖昧になり得るため、ユニークな場合のみ「使用中」とみなす
+    const base = path.posix.basename(candidateLower);
+    const matches = mediaByBasenameLower.get(base);
+    if (matches && matches.length === 1) {
+      unusedFiles.delete(matches[0]);
+    }
   }
 
   // Process files in batches for better performance
@@ -275,90 +317,39 @@ export async function findUnusedMediaFiles(
           }
 
           const content = await fsPromises.readFile(file.fsPath, 'utf-8');
-          const contentLower = content.toLowerCase();
 
-          // Check each unused file
-          // 未使用候補の各メディアファイルについて参照有無を確認
-          for (const [mediaFile, searchTerms] of mediaFileMap.entries()) {
-            if (!unusedFiles.has(mediaFile)) {
-              continue; // Already found to be used
+          // Extract candidates from url() and string literals, then match against indexes.
+          // url() や文字列リテラルから候補を抽出し、インデックスと照合
+          const urlRe = /url\(\s*(['"`]?)([^'"`)\r\n]+)\1\s*\)/gi;
+          const strRe = /['"`]([^'"`\r\n]+)['"`]/g;
+
+          for (const match of content.matchAll(urlRe)) {
+            if (token.isCancellationRequested) {
+              return;
             }
+            const candidate = normalizeCandidate(match[2] ?? '');
+            if (candidate) {
+              markUsedByCandidate(candidate);
+            }
+          }
 
-            // Quick check for any of the search terms
-            // 検索語の簡易チェック（早期判定）
-            const isUsed = searchTerms.some((term) =>
-              contentLower.includes(term)
-            );
-
-            if (isUsed) {
-              // Do more detailed check only if quick check passed
-              // 簡易チェックに引っかかった場合のみ詳細チェック
-              const fileName = path.basename(mediaFile);
-              const fileNameWithoutExt = path.basename(
-                mediaFile,
-                path.extname(mediaFile)
-              );
-
-              const patterns = [
-                // Direct paths
-                // 先頭スラッシュ付きの直接パス
-                `/${mediaFile}`,
-                `"/${mediaFile}"`,
-                `'/${mediaFile}'`,
-                `\`/${mediaFile}\``,
-                // Without leading slash
-                // 先頭スラッシュなしのパス
-                mediaFile,
-                `"${mediaFile}"`,
-                `'${mediaFile}'`,
-                `\`${mediaFile}\``,
-                // Just filename
-                // ファイル名のみ
-                fileName,
-                `"${fileName}"`,
-                `'${fileName}'`,
-                `\`${fileName}\``,
-                // CSS url() patterns
-                // CSSの url() パターン
-                `url(/${mediaFile})`,
-                `url("/${mediaFile}")`,
-                `url('/${mediaFile}')`,
-                `url(${mediaFile})`,
-                `url("${mediaFile}")`,
-                `url('${mediaFile}')`,
-                // Next.js Image component patterns
-                // Next.js Imageコンポーネントの参照パターン
-                `src={"/${mediaFile}"}`,
-                `src={'/${mediaFile}'}`,
-                `src={\`/${mediaFile}\`}`,
-                `src="${mediaFile}"`,
-                `src='${mediaFile}'`,
-              ];
-
-              const staticPatternCheck = patterns.some((pattern) => {
-                return contentLower.includes(pattern.toLowerCase());
-              });
-
-              // Dynamic pattern detection using regex
-              // 正規表現で動的参照っぽい記述も検出
-              const stemWordBoundary = `\\b${escapeRegExp(
-                fileNameWithoutExt
-              )}\\b`;
-              const dynamicPatterns = [
-                new RegExp(`['"\`].*${escapeRegExp(fileName)}['"\`]`, 'i'),
-                new RegExp(
-                  `['"\`][^'"\`]*${stemWordBoundary}[^'"\`]*['"\`]`,
-                  'i'
-                ),
-              ];
-
-              const dynamicPatternCheck = dynamicPatterns.some((regex) =>
-                regex.test(content)
-              );
-
-              if (staticPatternCheck || dynamicPatternCheck) {
-                unusedFiles.delete(mediaFile);
-              }
+          for (const match of content.matchAll(strRe)) {
+            if (token.isCancellationRequested) {
+              return;
+            }
+            const raw = match[1] ?? '';
+            // Heuristic: only consider strings that look like paths/filenames
+            // Heuristic: パス/ファイル名っぽい文字列のみを候補として扱う
+            if (
+              !raw.includes('/') &&
+              !raw.includes('.') &&
+              !raw.includes('\\')
+            ) {
+              continue;
+            }
+            const candidate = normalizeCandidate(raw);
+            if (candidate) {
+              markUsedByCandidate(candidate);
             }
           }
         } catch (error) {
