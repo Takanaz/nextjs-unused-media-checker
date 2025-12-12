@@ -5,6 +5,7 @@ All notable changes to the "nextjs-unused-media-checker" extension will be docum
 ## [0.1.3]
 
 - Ensure that VSCode-compatible editors reliably open the public folder
+- Add publishing support for Open VSX Registory (ovsx)
 
 ## [0.1.2]
 
