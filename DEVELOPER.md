@@ -22,7 +22,7 @@ This guide provides comprehensive information for developers who want to contrib
 ### Required Software
 
 - **Node.js**: Version 18 or higher
-- **yarn**: Latest version (comes with Node.js)
+- **pnpm**: Latest version (recommended)
 - **VS Code**: Latest version
 - **Git**: For version control
 
@@ -46,26 +46,26 @@ cd nextjs-unused-media-checker
 ### 2. Install Dependencies
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ### 3. Initial Build
 
 ```bash
-yarn run compile
+pnpm run compile
 ```
 
 ### 4. Verify Setup
 
 ```bash
 # Run type checking
-yarn run check-types
+pnpm run check-types
 
 # Run code quality checks
-yarn run check
+pnpm run check
 
 # Run tests
-yarn test
+pnpm test
 ```
 
 ## Development Workflow
@@ -74,7 +74,7 @@ yarn test
 
 ```bash
 # Start watch mode for automatic rebuilding
-yarn run watch
+pnpm run watch
 ```
 
 This command runs multiple watchers in parallel:
@@ -93,29 +93,29 @@ This command runs multiple watchers in parallel:
 
 ```bash
 # Build for development
-yarn run compile
+pnpm run compile
 
 # Build for production
-yarn run package
+pnpm run package
 
 # Type checking only
-yarn run check-types
+pnpm run check-types
 
 # Code quality check (lint + format)
-yarn run check
+pnpm run check
 
 # Auto-fix code quality issues
-yarn run check:fix
+pnpm run check:fix
 
 # Format code only
-yarn run format
-yarn run format:fix
+pnpm run format
+pnpm run format:fix
 
 # Run all tests
-yarn test
+pnpm test
 
 # Create VSIX package
-yarn run package
+pnpm run package
 ```
 
 ## Architecture Overview
@@ -194,13 +194,13 @@ Tests are located in `src/test/extension.test.ts` and use the Mocha framework.
 
 ```bash
 # Run all tests
-yarn test
+pnpm test
 
 # Run tests in watch mode
-yarn run watch-tests
+pnpm run watch-tests
 
 # Compile tests only
-yarn run compile-tests
+pnpm run compile-tests
 ```
 
 ### Writing Tests
@@ -220,7 +220,7 @@ suite("Your Test Suite", () => {
 ### Development Build
 
 ```bash
-yarn run compile
+pnpm run compile
 ```
 
 This creates a development build with:
@@ -232,7 +232,7 @@ This creates a development build with:
 ### Production Build
 
 ```bash
-yarn run package
+pnpm run package
 ```
 
 This creates a production build with:
@@ -245,7 +245,7 @@ This creates a production build with:
 
 ```bash
 # Ensure you have vsce installed globally
-yarn add -G vsce
+pnpm add -g @vscode/vsce
 
 # Create package
 vsce package
@@ -262,13 +262,13 @@ To publish to Open VSX Registry, use the `ovsx` CLI.
 export OVSX_PAT=your_open_vsx_personal_access_token
 
 # Create a package (optional)
-yarn run ovsx:package
+pnpm run ovsx:package
 
 # Publish
-yarn run ovsx:publish
+pnpm run ovsx:publish
 
 # Or run build -> publish in one go
-yarn run release:ovsx
+pnpm run release:ovsx
 ```
 
 Notes:
@@ -299,7 +299,7 @@ The `.vscode/launch.json` should contain:
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "${workspaceFolder}/yarn: watch"
+      "preLaunchTask": "${workspaceFolder}/pnpm: watch"
     }
   ]
 }
@@ -336,7 +336,7 @@ The project uses Biome for linting and formatting. Configuration is in `biome.js
 
 ```bash
 # Install lefthook if not already installed
-yarn add -G lefthook
+pnpm add -g lefthook
 
 # Install hooks
 lefthook install
@@ -365,8 +365,8 @@ This ensures code quality checks run before commits.
 
 ```bash
 # Build and test
-yarn run package
-yarn test
+pnpm run package
+pnpm test
 
 # Create and push tag
 git tag -a v0.1.1 -m "Release version 0.1.1"
@@ -393,20 +393,20 @@ vsce publish
 
 ```bash
 # Check compilation
-yarn run compile
+pnpm run compile
 
 # Check for TypeScript errors
-yarn run check-types
+pnpm run check-types
 ```
 
 #### Tests Failing
 
 ```bash
 # Ensure test compilation
-yarn run compile-tests
+pnpm run compile-tests
 
 # Check test environment
-yarn run pretest
+pnpm run pretest
 ```
 
 #### Package Build Fails
@@ -414,8 +414,8 @@ yarn run pretest
 ```bash
 # Clean and rebuild
 rm -rf dist/ out/
-yarn run compile
-yarn run package
+pnpm run compile
+pnpm run package
 ```
 
 #### VS Code Integration Issues

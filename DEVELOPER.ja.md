@@ -22,7 +22,7 @@
 ### 必須ソフトウェア
 
 - **Node.js**: 18 以上
-- **yarn**: 最新（Node.js 付属の Corepack などで利用可能）
+- **pnpm**: 最新（推奨）
 - **VS Code**: 最新
 - **Git**: バージョン管理用
 
@@ -46,26 +46,26 @@ cd nextjs-unused-media-checker
 ### 2. 依存関係をインストール
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ### 3. 初回ビルド
 
 ```bash
-yarn run compile
+pnpm run compile
 ```
 
 ### 4. セットアップ確認
 
 ```bash
 # 型チェック
-yarn run check-types
+pnpm run check-types
 
 # コード品質チェック
-yarn run check
+pnpm run check
 
 # テスト実行
-yarn test
+pnpm test
 ```
 
 ## 開発ワークフロー
@@ -74,7 +74,7 @@ yarn test
 
 ```bash
 # 自動ビルドのための watch モードを開始
-yarn run watch
+pnpm run watch
 ```
 
 このコマンドは複数の watcher を並列に動かします:
@@ -93,29 +93,29 @@ yarn run watch
 
 ```bash
 # 開発用ビルド
-yarn run compile
+pnpm run compile
 
 # 本番用ビルド
-yarn run package
+pnpm run package
 
 # 型チェックのみ
-yarn run check-types
+pnpm run check-types
 
 # コード品質チェック（lint + format）
-yarn run check
+pnpm run check
 
 # コード品質の自動修正
-yarn run check:fix
+pnpm run check:fix
 
 # フォーマットのみ
-yarn run format
-yarn run format:fix
+pnpm run format
+pnpm run format:fix
 
 # テスト実行
-yarn test
+pnpm test
 
 # VSIX 生成
-yarn run package
+pnpm run package
 ```
 
 ## アーキテクチャ概要
@@ -194,13 +194,13 @@ images/                  # 拡張機能アセット
 
 ```bash
 # 全テスト実行
-yarn test
+pnpm test
 
 # watch モードでテスト
-yarn run watch-tests
+pnpm run watch-tests
 
 # テストのみコンパイル
-yarn run compile-tests
+pnpm run compile-tests
 ```
 
 ### テストを書く
@@ -220,7 +220,7 @@ suite("Your Test Suite", () => {
 ### 開発ビルド
 
 ```bash
-yarn run compile
+pnpm run compile
 ```
 
 このビルドは以下の特性があります:
@@ -232,7 +232,7 @@ yarn run compile
 ### 本番ビルド
 
 ```bash
-yarn run package
+pnpm run package
 ```
 
 このビルドは以下の特性があります:
@@ -245,7 +245,7 @@ yarn run package
 
 ```bash
 # 事前に vsce をグローバルにインストール
-yarn add -G vsce
+pnpm add -g @vscode/vsce
 
 # パッケージ生成
 vsce package
@@ -262,13 +262,13 @@ Open VSX Registry に公開する場合は `ovsx` CLI を使用します。
 export OVSX_PAT=your_open_vsx_personal_access_token
 
 # パッケージ作成（必要に応じて）
-yarn run ovsx:package
+pnpm run ovsx:package
 
 # 公開
-yarn run ovsx:publish
+pnpm run ovsx:publish
 
 # あるいは、ビルド→公開を一括実行
-yarn run release:ovsx
+pnpm run release:ovsx
 ```
 
 注:
@@ -299,7 +299,7 @@ yarn run release:ovsx
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "${workspaceFolder}/yarn: watch"
+      "preLaunchTask": "${workspaceFolder}/pnpm: watch"
     }
   ]
 }
@@ -336,7 +336,7 @@ outputChannel.show();
 
 ```bash
 # lefthook を未導入ならインストール
-yarn add -G lefthook
+pnpm add -g lefthook
 
 # フックをインストール
 lefthook install
@@ -365,8 +365,8 @@ lefthook install
 
 ```bash
 # ビルドとテスト
-yarn run package
-yarn test
+pnpm run package
+pnpm test
 
 # タグ作成・push
 git tag -a v0.1.1 -m "Release version 0.1.1"
@@ -393,20 +393,20 @@ vsce publish
 
 ```bash
 # コンパイル確認
-yarn run compile
+pnpm run compile
 
 # TypeScript エラー確認
-yarn run check-types
+pnpm run check-types
 ```
 
 #### テストが失敗する
 
 ```bash
 # テストのコンパイルを確認
-yarn run compile-tests
+pnpm run compile-tests
 
 # テスト環境確認
-yarn run pretest
+pnpm run pretest
 ```
 
 #### パッケージビルドが失敗する
@@ -414,8 +414,8 @@ yarn run pretest
 ```bash
 # クリーンして再ビルド
 rm -rf dist/ out/
-yarn run compile
-yarn run package
+pnpm run compile
+pnpm run package
 ```
 
 #### VS Code 連携の問題

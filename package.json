@@ -39,6 +39,7 @@
     "theme": "dark"
   },
   "main": "./dist/extension.js",
+  "packageManager": "pnpm@10.15.0",
   "contributes": {
     "commands": [
       {
@@ -101,15 +102,15 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run package",
-    "compile": "yarn run check-types && yarn run lint && node esbuild.js",
+    "vscode:prepublish": "pnpm run package",
+    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
+    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "check-types": "tsc --noEmit",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
@@ -120,7 +121,7 @@
     "test": "vscode-test",
     "ovsx:package": "ovsx package",
     "ovsx:publish": "ovsx publish -p $OVSX_PAT",
-    "release:ovsx": "yarn run package && ovsx publish -p $OVSX_PAT"
+    "release:ovsx": "pnpm run package && ovsx publish -p $OVSX_PAT"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.3",

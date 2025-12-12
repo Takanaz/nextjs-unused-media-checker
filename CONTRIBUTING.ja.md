@@ -24,25 +24,25 @@ cd nextjs-unused-media-checker
 2. **依存関係のインストール**
 
 ```bash
+pnpm install
+# または（pnpmを使わない場合）
 npm install
-# または
-yarn install
 ```
 
 3. **開発開始**
 
 ```bash
-npm run watch
+pnpm run watch
 # または
-yarn run watch
+npm run watch
 ```
 
 4. **テスト実行**
 
 ```bash
-npm test
+pnpm test
 # または
-yarn test
+npm test
 ```
 
 ## 開発ワークフロー
@@ -51,24 +51,24 @@ yarn test
 
 ```bash
 # 開発ビルド
-npm run compile
+pnpm run compile
 
 # 本番ビルド
-npm run package
+pnpm run package
 
 # 型チェック
-npm run check-types
+pnpm run check-types
 
 # コードチェック＆フォーマット
-npm run check
-npm run check:fix
+pnpm run check
+pnpm run check:fix
 ```
 
 ### 拡張機能の動作確認
 
 ```bash
 # VSIX を作成
-npm run package
+pnpm run package
 vsce package
 
 # ローカルにインストール
