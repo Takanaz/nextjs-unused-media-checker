@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 
 // Mock workspace configuration
+// VS Codeのワークスペース設定をモック
 const createMockConfig = (values: Record<string, unknown> = {}) => ({
   get: (key: string, defaultValue?: unknown) => {
     return values[key] !== undefined ? values[key] : defaultValue;
@@ -21,6 +22,7 @@ suite('Extension Test Suite', () => {
 
   suiteSetup(async () => {
     // Create temporary directory structure for testing
+    // テスト用の一時ディレクトリ構造を作成
     tempDir = await fsPromises.mkdtemp(path.join(os.tmpdir(), 'nextjs-test-'));
     publicDir = path.join(tempDir, 'public');
     srcDir = path.join(tempDir, 'src');
@@ -31,6 +33,7 @@ suite('Extension Test Suite', () => {
 
   suiteTeardown(async () => {
     // Clean up temporary directory
+    // 一時ディレクトリをクリーンアップ
     if (tempDir) {
       await fsPromises.rm(tempDir, { recursive: true, force: true });
     }
@@ -39,6 +42,7 @@ suite('Extension Test Suite', () => {
   suite('Media File Detection', () => {
     test('should detect various media file types', async () => {
       // Create test media files
+      // テスト用のメディアファイルを作成
       const mediaFiles = [
         'image.jpg',
         'photo.PNG', // Test case insensitive
@@ -64,12 +68,14 @@ suite('Extension Test Suite', () => {
       }
 
       // Import and test the findMediaFiles function
+      // findMediaFiles 関数を読み込んでテスト
       const { findMediaFiles } = await import('../extension.js');
       const result = await findMediaFiles(publicDir);
 
       assert.strictEqual(result.length, mediaFiles.length);
 
       // Check that all media files are detected
+      // 全てのメディアファイルが検出されることを確認
       for (const file of mediaFiles) {
         assert.ok(result.includes(file), `Should detect ${file}`);
       }
@@ -77,6 +83,7 @@ suite('Extension Test Suite', () => {
 
     test('should ignore non-media files', async () => {
       // Create non-media files
+      // メディアではないファイルを作成
       const nonMediaFiles = [
         'script.js',
         'style.css',
@@ -93,6 +100,7 @@ suite('Extension Test Suite', () => {
       const result = await findMediaFiles(publicDir);
 
       // Should not detect non-media files
+      // 非メディアファイルは検出されないことを確認
       for (const file of nonMediaFiles) {
         assert.ok(!result.includes(file), `Should not detect ${file}`);
       }
@@ -100,6 +108,7 @@ suite('Extension Test Suite', () => {
 
     test('should handle subdirectories', async () => {
       // Create subdirectory structure
+      // サブディレクトリ構造を作成します
       const subDir = path.join(publicDir, 'images', 'gallery');
       await fsPromises.mkdir(subDir, { recursive: true });
 
@@ -129,14 +138,17 @@ suite('Extension Test Suite', () => {
         const result = await findMediaFiles(publicDir);
 
         // Should detect the real file but not follow the symbolic link
+        // 実ファイルは検出されても、シンボリックリンクは辿らないことを確認
         assert.ok(result.includes('real.jpg'));
         // Should not have duplicate entries from following symlinks
+        // シンボリックリンクを辿った結果、重複が発生しないことを確認
         const realFileCount = result.filter(
           (file: string) => file === 'real.jpg'
         ).length;
         assert.strictEqual(realFileCount, 1);
       } catch (error) {
         // Skip test if symlinks are not supported (e.g., Windows without admin rights)
+        // シンボリックリンクが使えない環境ではテストをスキップ（例: 権限のないWindows）
         console.warn('Skipping symlink test:', error);
       }
     });
@@ -145,6 +157,7 @@ suite('Extension Test Suite', () => {
   suite('Usage Detection', () => {
     test('should detect direct file references', async () => {
       // Create test files
+      // テスト用ファイルを作成
       await fsPromises.writeFile(
         path.join(publicDir, 'used.jpg'),
         'test content'
@@ -155,6 +168,7 @@ suite('Extension Test Suite', () => {
       );
 
       // Create source file that references used.jpg
+      // used.jpg を参照するソースファイルを作成
       const sourceContent = `
         import React from 'react';
         const MyComponent = () => {
@@ -168,12 +182,14 @@ suite('Extension Test Suite', () => {
       );
 
       // Mock vscode.workspace.findFiles
+      // vscode.workspace.findFiles をモック
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'component.tsx') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'component.tsx')),
       ];
 
       // Mock vscode.workspace.getConfiguration
+      // vscode.workspace.getConfiguration をモック
       const originalGetConfiguration = vscode.workspace.getConfiguration;
       vscode.workspace.getConfiguration = () => createMockConfig();
 
@@ -211,7 +227,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'styles.css') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'styles.css')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -238,6 +254,41 @@ suite('Extension Test Suite', () => {
       }
     });
 
+    test('should detect references with query/hash and unquoted url()', async () => {
+      await fsPromises.writeFile(
+        path.join(publicDir, 'asset.png'),
+        'test content'
+      );
+
+      const cssContent = `
+        .hero {
+          background-image: url(/asset.png?v=1#hash);
+        }
+      `;
+      await fsPromises.writeFile(path.join(srcDir, 'styles2.css'), cssContent);
+
+      const originalFindFiles = vscode.workspace.findFiles;
+      vscode.workspace.findFiles = async () => [
+        vscode.Uri.file(path.join(srcDir, 'styles2.css')),
+      ];
+
+      const originalGetConfiguration = vscode.workspace.getConfiguration;
+      vscode.workspace.getConfiguration = () => createMockConfig();
+
+      try {
+        const { findUnusedMediaFiles } = await import('../extension.js');
+        const mockToken = {
+          isCancellationRequested: false,
+        } as vscode.CancellationToken;
+        const result = await findUnusedMediaFiles(['asset.png'], mockToken);
+
+        assert.strictEqual(result.length, 0);
+      } finally {
+        vscode.workspace.findFiles = originalFindFiles;
+        vscode.workspace.getConfiguration = originalGetConfiguration;
+      }
+    });
+
     test('should detect Next.js Image component references', async () => {
       await fsPromises.writeFile(
         path.join(publicDir, 'hero.png'),
@@ -254,7 +305,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'hero.tsx') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'hero.tsx')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -289,7 +340,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'index.html') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'index.html')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -312,6 +363,46 @@ suite('Extension Test Suite', () => {
         vscode.workspace.getConfiguration = originalGetConfiguration;
       }
     });
+
+    test('should not treat plain stem occurrences as usage', async () => {
+      await fsPromises.writeFile(
+        path.join(publicDir, 'hero.png'),
+        'test content'
+      );
+
+      // Filename stem appears in code, but not as a path/string reference.
+      // ファイル名のstem（拡張子なし部分）がコードに出ても、パス/文字列参照でなければ「使用中」扱いしないことを確認
+      const sourceContent = `
+        export const hero = { title: "Hello" };
+        export function getHero() { return hero; }
+      `;
+      await fsPromises.writeFile(
+        path.join(srcDir, 'not-a-reference.ts'),
+        sourceContent
+      );
+
+      const originalFindFiles = vscode.workspace.findFiles;
+      vscode.workspace.findFiles = async () => [
+        vscode.Uri.file(path.join(srcDir, 'not-a-reference.ts')),
+      ];
+
+      const originalGetConfiguration = vscode.workspace.getConfiguration;
+      vscode.workspace.getConfiguration = () => createMockConfig();
+
+      try {
+        const { findUnusedMediaFiles } = await import('../extension.js');
+        const mockToken = {
+          isCancellationRequested: false,
+        } as vscode.CancellationToken;
+        const result = await findUnusedMediaFiles(['hero.png'], mockToken);
+
+        assert.strictEqual(result.length, 1);
+        assert.ok(result.includes('hero.png'));
+      } finally {
+        vscode.workspace.findFiles = originalFindFiles;
+        vscode.workspace.getConfiguration = originalGetConfiguration;
+      }
+    });
   });
 
   suite('Configuration', () => {
@@ -319,6 +410,7 @@ suite('Extension Test Suite', () => {
       const customExtensions = ['.jpg', '.png'];
 
       // Create files with different extensions
+      // 拡張子が異なるファイルを作成
       await fsPromises.writeFile(
         path.join(publicDir, 'image.jpg'),
         'test content'
@@ -365,7 +457,7 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'component.jsx') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'component.jsx')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -382,6 +474,7 @@ suite('Extension Test Suite', () => {
         const result = await findUnusedMediaFiles(['used.jpg'], mockToken);
 
         // Should not find the file because src directory is excluded
+        // src ディレクトリが除外されている場合に参照が見つからないことを確認
         assert.strictEqual(result.length, 1);
         assert.ok(result.includes('used.jpg'));
       } finally {
@@ -420,7 +513,7 @@ suite('Extension Test Suite', () => {
     test('should handle file read errors gracefully', async () => {
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: '/nonexistent/file.js' } as vscode.Uri,
+        vscode.Uri.file('/nonexistent/file.js'),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
@@ -434,6 +527,7 @@ suite('Extension Test Suite', () => {
         const result = await findUnusedMediaFiles(['test.jpg'], mockToken);
 
         // Should not throw an error and should return the original list
+        // エラーを投げず、元のリストを返すことを確認
         assert.strictEqual(result.length, 1);
         assert.ok(result.includes('test.jpg'));
       } finally {
@@ -449,6 +543,7 @@ suite('Extension Test Suite', () => {
       const result = await findMediaFiles(nonExistentDir);
 
       // Should not throw an error and should return empty array
+      // エラーを投げずに空配列を返すことを確認
       assert.strictEqual(result.length, 0);
     });
 
@@ -460,13 +555,14 @@ suite('Extension Test Suite', () => {
 
       const originalFindFiles = vscode.workspace.findFiles;
       vscode.workspace.findFiles = async () => [
-        { fsPath: path.join(srcDir, 'test.js') } as vscode.Uri,
+        vscode.Uri.file(path.join(srcDir, 'test.js')),
       ];
 
       const originalGetConfiguration = vscode.workspace.getConfiguration;
       vscode.workspace.getConfiguration = () => createMockConfig();
 
       // Create a cancelled token
+      // キャンセル済みトークンを作成
       const mockToken = {
         isCancellationRequested: true,
       } as vscode.CancellationToken;
@@ -476,6 +572,7 @@ suite('Extension Test Suite', () => {
         const result = await findUnusedMediaFiles(['test.jpg'], mockToken);
 
         // Should respect cancellation and return original array
+        // キャンセルを尊重し、元の配列を返すことを確認
         assert.strictEqual(result.length, 1);
         assert.ok(result.includes('test.jpg'));
       } finally {

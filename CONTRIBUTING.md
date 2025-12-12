@@ -80,6 +80,7 @@ code --install-extension nextjs-unused-media-checker-*.vsix
 
 - Follow existing TypeScript conventions
 - Use Biome for linting and formatting
+- When adding code comments, add a Japanese translation directly below the English comment (as best as you can, or use an AI agent)
 - Write meaningful commit messages
 - Add tests for new features
 

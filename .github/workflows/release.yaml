@@ -31,8 +31,13 @@ jobs:
           node-version: "20"
           cache: "pnpm"
 
+      - name: Setup safe-chain
+        run: |
+          npm i -g @aikidosec/safe-chain
+          safe-chain setup-ci
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --safe-chain-malware-action=block
 
       - name: Get package version
         id: package-version

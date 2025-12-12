@@ -1,5 +1,5 @@
 export const ja = {
-  // Extension messages
+  // 拡張機能
   'extension.activated': 'Next.js 未使用メディアチェッカーが有効になりました！',
   'extension.noWorkspace': 'ワークスペースフォルダーが見つかりません',
   'extension.noPublicDirectory':
@@ -17,7 +17,7 @@ export const ja = {
     '{0}個の未使用メディアファイルが見つかりました ({1})。ファイルエクスプローラーで装飾を確認してください。',
   'extension.openFolder': 'Publicフォルダーを開く',
 
-  // Webview content
+  // Webview
   'webview.title': 'Public ディレクトリ内の未使用メディアファイル',
   'webview.totalFiles': '未使用ファイル総数',
   'webview.totalSize': '総サイズ',
@@ -31,7 +31,7 @@ export const ja = {
   'webview.copySuccess': 'ファイルリストをクリップボードにコピーしました！',
   'webview.exportFileName': 'unused-media-files.json',
 
-  // Tips
+  // ヒント
   'tips.title': 'ヒント',
   'tips.clickFile': 'ファイル名をクリックするとエディターで開きます',
   'tips.sortedFiles':
@@ -40,27 +40,27 @@ export const ja = {
     'このツールは JS、TS、CSS、HTML、JSON、Markdown ファイル内の参照をチェックします',
   'tips.dynamicDetection': '動的インポートとテンプレートリテラルも検出されます',
 
-  // File formats
+  // 単位
   bytes: 'バイト',
   kb: 'KB',
   mb: 'MB',
   gb: 'GB',
 
-  // Error messages
+  // エラーメッセージ
   'error.directoryRead': 'ディレクトリ {0} を読み取れません: {1}',
   'error.fileProcess': '{0} を処理できません: {1}',
   'error.fileRead': 'ファイル {0} を読み取れません: {1}',
 
-  // Configuration
+  // 設定
   'config.title': 'Next.js 未使用メディアチェッカー',
   'config.excludePatterns.description': 'ファイル検索から除外するパターン',
   'config.mediaExtensions.description': 'メディアファイルとして扱う拡張子',
   'config.publicDirectory.description': 'スキャンするpublicディレクトリの名前',
 
-  // Commands
+  // コマンド
   'command.checkUnusedMedia': '未使用メディアファイルをチェック',
 
-  // File decorations
+  // ファイルデコレーション
   'decoration.unused':
     'このメディアファイルはプロジェクト内で使用されていません',
   'decoration.used': 'このメディアファイルはプロジェクト内で使用されています',

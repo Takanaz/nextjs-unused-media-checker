@@ -81,6 +81,7 @@ code --install-extension nextjs-unused-media-checker-*.vsix
 
 - 既存の TypeScript の規約に合わせる
 - lint/format は Biome を利用する
+- コードコメントを追加する場合は、英語コメントの直下に日本語コメントも併記する
 - 意味のあるコミットメッセージを書く
 - 新機能には可能な限りテストを追加する
 
