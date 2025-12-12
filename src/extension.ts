@@ -299,7 +299,7 @@ export async function findUnusedMediaFiles(
     // Normalize slashes, strip query/hash, and remove leading prefixes
     // パスの区切りを統一し、クエリ/ハッシュを除去し、先頭のプレフィックス除去
     let value = trimmed.replace(/\\/g, '/');
-    value = value.split('?')[0]?.split('#')[0] ?? value;
+    value = value.split('?')[0].split('#')[0];
     value = value.replace(/^\.\/+/, '');
     value = value.replace(/^\/+/, '');
     value = value.replace(/^public\/+/, '');
