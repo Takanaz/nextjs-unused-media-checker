@@ -4,6 +4,15 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.6]
+
+- Improve unused detection accuracy by reducing false positives from plain filename-stem matches
+- Improve detection performance by extracting reference candidates from `url()` and string literals instead of scanning every media file against every source file
+- Reduce ambiguous basename-only matches (only treat as used when unique)
+- Improve workspace compatibility by using `vscode.workspace.fs` for file reads/stats and correctly applying exclude patterns in `findFiles`
+- Add Aikido Safe Chain to CI to protect dependency installs (malware action: block)
+- Add Japanese comments alongside existing code comments
+
 ## [0.1.5]
 
 - Migrate from npm/yarn to pnpm (including CI)
