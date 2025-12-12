@@ -1,5 +1,7 @@
 # Security Policy
 
+English | [日本語](SECURITY.ja.md)
+
 ## Data Privacy
 
 This extension:
@@ -21,7 +23,7 @@ The extension only accesses:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.0   | :white_check_mark: |
+| 0.1.4   | :white_check_mark: |
 
 ## Security Best Practices
 
