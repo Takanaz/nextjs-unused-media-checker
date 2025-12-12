@@ -328,6 +328,45 @@ suite('Extension Test Suite', () => {
         vscode.workspace.getConfiguration = originalGetConfiguration;
       }
     });
+
+    test('should not treat plain stem occurrences as usage', async () => {
+      await fsPromises.writeFile(
+        path.join(publicDir, 'hero.png'),
+        'test content'
+      );
+
+      // Filename stem appears in code, but not as a path/string reference.
+      const sourceContent = `
+        export const hero = { title: "Hello" };
+        export function getHero() { return hero; }
+      `;
+      await fsPromises.writeFile(
+        path.join(srcDir, 'not-a-reference.ts'),
+        sourceContent
+      );
+
+      const originalFindFiles = vscode.workspace.findFiles;
+      vscode.workspace.findFiles = async () => [
+        { fsPath: path.join(srcDir, 'not-a-reference.ts') } as vscode.Uri,
+      ];
+
+      const originalGetConfiguration = vscode.workspace.getConfiguration;
+      vscode.workspace.getConfiguration = () => createMockConfig();
+
+      try {
+        const { findUnusedMediaFiles } = await import('../extension.js');
+        const mockToken = {
+          isCancellationRequested: false,
+        } as vscode.CancellationToken;
+        const result = await findUnusedMediaFiles(['hero.png'], mockToken);
+
+        assert.strictEqual(result.length, 1);
+        assert.ok(result.includes('hero.png'));
+      } finally {
+        vscode.workspace.findFiles = originalFindFiles;
+        vscode.workspace.getConfiguration = originalGetConfiguration;
+      }
+    });
   });
 
   suite('Configuration', () => {

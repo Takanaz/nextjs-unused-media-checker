@@ -240,17 +240,12 @@ export async function findUnusedMediaFiles(
   const mediaFileMap = new Map<string, string[]>();
   for (const mediaFile of mediaFiles) {
     const fileName = path.basename(mediaFile);
-    const fileNameWithoutExt = path.basename(
-      mediaFile,
-      path.extname(mediaFile)
-    );
 
     // Store various search patterns for each media file
     // メディアファイルごとに複数の検索パターンを保持
     mediaFileMap.set(mediaFile, [
       mediaFile.toLowerCase(),
       fileName.toLowerCase(),
-      fileNameWithoutExt.toLowerCase(),
     ]);
   }
 
@@ -323,9 +318,6 @@ export async function findUnusedMediaFiles(
                 `"${fileName}"`,
                 `'${fileName}'`,
                 `\`${fileName}\``,
-                // Filename without extension
-                // 拡張子なしのファイル名
-                fileNameWithoutExt,
                 // CSS url() patterns
                 // CSSの url() パターン
                 `url(/${mediaFile})`,
@@ -349,10 +341,13 @@ export async function findUnusedMediaFiles(
 
               // Dynamic pattern detection using regex
               // 正規表現で動的参照っぽい記述も検出
+              const stemWordBoundary = `\\b${escapeRegExp(
+                fileNameWithoutExt
+              )}\\b`;
               const dynamicPatterns = [
                 new RegExp(`['"\`].*${escapeRegExp(fileName)}['"\`]`, 'i'),
                 new RegExp(
-                  `['"\`].*${escapeRegExp(fileNameWithoutExt)}.*['"\`]`,
+                  `['"\`][^'"\`]*${stemWordBoundary}[^'"\`]*['"\`]`,
                   'i'
                 ),
               ];
