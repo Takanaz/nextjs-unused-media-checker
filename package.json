@@ -2,7 +2,7 @@
   "name": "nextjs-unused-media-checker",
   "displayName": "Next.js Unused Media Checker",
   "description": "A VSCode extension to detect unused media files in your Next.js project's public directory.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "publisher": "Takanaz",
   "author": {
     "name": "Takanaz"
@@ -138,7 +138,8 @@
   },
   "pnpm": {
     "overrides": {
-      "glob@>=10.2.0 <10.5.0": "10.5.0"
+      "glob@>=10.2.0 <10.5.0": "10.5.0",
+      "js-yaml@4.1.0": "4.1.1"
     }
   }
 }

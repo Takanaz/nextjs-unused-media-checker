@@ -4,6 +4,10 @@
 
 このファイルには、拡張機能「nextjs-unused-media-checker」の主な変更点を記録します。
 
+## [0.1.8]
+
+- セキュリティ: js-yaml の prototype pollution 脆弱性に対応（pnpm overrides により js-yaml@4.1.1 に固定）
+
 ## [0.1.7]
 
 - Open VSX Registry (ovsx)のネームスペースを変更
