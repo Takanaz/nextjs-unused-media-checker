@@ -4,6 +4,10 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.7]
+
+- Change Namespaces of Open VSX Registry (ovsx)
+
 ## [0.1.6]
 
 - Improve unused detection accuracy by reducing false positives from plain filename-stem matches

@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/visual-studio-marketplace/v/Takanaz.nextjs-unused-media-checker?style=for-the-badge&logo=visual-studio-code" alt="Version">
   <img src="https://img.shields.io/visual-studio-marketplace/d/Takanaz.nextjs-unused-media-checker?style=for-the-badge" alt="Downloads">
   <img src="https://img.shields.io/github/license/Takanaz/nextjs-unused-media-checker?style=for-the-badge" alt="License">
-  <a href="https://open-vsx.org/extension/takanaz/nextjs-unused-media-checker"><img src="https://img.shields.io/open-vsx/v/takanaz/nextjs-unused-media-checker?label=Open%20VSX&style=for-the-badge" alt="Open VSX"></a>
+  <a href="https://open-vsx.org/extension/Takanaz/nextjs-unused-media-checker"><img src="https://img.shields.io/open-vsx/v/Takanaz/nextjs-unused-media-checker?label=Open%20VSX&style=for-the-badge" alt="Open VSX"></a>
 </p>
 
 <p align="center"> 
@@ -36,7 +36,7 @@ Next.js プロジェクトにおける`public`ディレクトリ内の未使用�
 ### インストール
 
 1. [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Takanaz.nextjs-unused-media-checker)からインストール
-2. [Open VSX Registry](https://open-vsx.org/extension/takanaz/nextjs-unused-media-checker) からインストール（Cursor, VSCodium など）
+2. [Open VSX Registry](https://open-vsx.org/extension/Takanaz/nextjs-unused-media-checker) からインストール（Cursor, VSCodium など）
 3. または拡張機能タブで「Next.js Unused Media Checker」を検索
 
 ### 使用方法
