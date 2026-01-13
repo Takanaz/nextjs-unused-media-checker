@@ -4,6 +4,12 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.9]
+
+- Security: address qs arrayLimit bypass advisory by upgrading transitive qs to 6.14.1 (via ovsx update)
+- Maintenance: bump ovsx to 0.10.8
+- Maintenance: bump @vscode/test-cli to 0.0.12
+
 ## [0.1.8]
 
 - Security: address js-yaml prototype pollution advisory by forcing js-yaml@4.1.1 via pnpm overrides
