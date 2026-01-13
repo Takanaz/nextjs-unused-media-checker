@@ -4,6 +4,12 @@
 
 このファイルには、拡張機能「nextjs-unused-media-checker」の主な変更点を記録します。
 
+## [0.1.9]
+
+- セキュリティ: qs の arrayLimit バイパス脆弱性に対応（推移依存 qs を 6.14.1 へ更新）
+- メンテナンス: ovsx を 0.10.8 へ更新
+- メンテナンス: @vscode/test-cli を 0.0.12 へ更新
+
 ## [0.1.8]
 
 - セキュリティ: js-yaml の prototype pollution 脆弱性に対応（pnpm overrides により js-yaml@4.1.1 に固定）
