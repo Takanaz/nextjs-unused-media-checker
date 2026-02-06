@@ -4,6 +4,15 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.20]
+
+- Security: address @isaacs/brace-expansion uncontrolled resource consumption (CVE-2026-25547, High) by updating transitive dependency to 5.0.1 via minimatch update
+- Security: address lodash prototype pollution in `_.unset` and `_.omit` (CVE-2025-13465, Medium) by updating transitive dependency to 4.17.23
+- Security: address undici unbounded decompression chain via Content-Encoding (CVE-2026-22036, Medium) by updating transitive dependency to 7.20.0
+- Security: address jsdiff denial of service in parsePatch/applyPatch (CVE-2026-24001, Low) by forcing diff@8.0.3 via pnpm overrides
+- Maintenance: bump ovsx to 0.10.9
+- Maintenance: bump typescript to 5.9.3
+
 ## [0.1.9]
 
 - Security: address qs arrayLimit bypass advisory by upgrading transitive qs to 6.14.1 (via ovsx update)

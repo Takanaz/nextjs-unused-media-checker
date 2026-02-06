@@ -4,6 +4,15 @@
 
 このファイルには、拡張機能「nextjs-unused-media-checker」の主な変更点を記録します。
 
+## [0.1.20]
+
+- セキュリティ: @isaacs/brace-expansion の無制限リソース消費脆弱性に対応（CVE-2026-25547, High／推移依存を 5.0.1 へ更新）
+- セキュリティ: lodash の `_.unset`・`_.omit` における Prototype Pollution 脆弱性に対応（CVE-2025-13465, Medium／推移依存を 4.17.23 へ更新）
+- セキュリティ: undici の Content-Encoding 経由の無制限展開チェーン脆弱性に対応（CVE-2026-22036, Medium／推移依存を 7.20.0 へ更新）
+- セキュリティ: jsdiff (diff) の parsePatch/applyPatch における DoS 脆弱性に対応（CVE-2026-24001, Low／pnpm overrides により diff@8.0.3 に固定）
+- メンテナンス: ovsx を 0.10.9 へ更新
+- メンテナンス: typescript を 5.9.3 へ更新
+
 ## [0.1.9]
 
 - セキュリティ: qs の arrayLimit バイパス脆弱性に対応（推移依存 qs を 6.14.1 へ更新）
