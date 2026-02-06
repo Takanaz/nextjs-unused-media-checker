@@ -4,6 +4,12 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.11]
+
+- Fix: revert @types/vscode to ^1.74.0 to match engines.vscode and resolve vsce publish error
+- CI: upgrade softprops/action-gh-release from v1 to v2.5.0
+- CI: bump pnpm version in release workflow from 10.15.0 to 10.28.2
+
 ## [0.1.10]
 
 - Security: address @isaacs/brace-expansion uncontrolled resource consumption (CVE-2026-25547, High) by updating transitive dependency to 5.0.1 via minimatch update

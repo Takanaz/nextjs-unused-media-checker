@@ -4,6 +4,12 @@
 
 このファイルには、拡張機能「nextjs-unused-media-checker」の主な変更点を記録します。
 
+## [0.1.11]
+
+- 修正: @types/vscode を ^1.74.0 に戻し、engines.vscode との整合性を回復（vsce パブリッシュエラーの解消）
+- CI: softprops/action-gh-release を v1 から v2.5.0 へアップグレード
+- CI: リリースワークフローの pnpm バージョンを 10.15.0 から 10.28.2 へ更新
+
 ## [0.1.10]
 
 - セキュリティ: @isaacs/brace-expansion の無制限リソース消費脆弱性に対応（CVE-2026-25547, High／推移依存を 5.0.1 へ更新）
