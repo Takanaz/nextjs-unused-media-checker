@@ -4,7 +4,7 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
-## [0.1.20]
+## [0.1.10]
 
 - Security: address @isaacs/brace-expansion uncontrolled resource consumption (CVE-2026-25547, High) by updating transitive dependency to 5.0.1 via minimatch update
 - Security: address lodash prototype pollution in `_.unset` and `_.omit` (CVE-2025-13465, Medium) by updating transitive dependency to 4.17.23
@@ -72,7 +72,6 @@ All notable changes to the "nextjs-unused-media-checker" extension will be docum
 - Configurable exclude patterns and media extensions
 - Summary notifications with public folder access
 - Advanced pattern detection:
-
   - Direct file references
   - CSS url() patterns
   - Next.js Image component patterns
