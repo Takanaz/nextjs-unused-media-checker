@@ -4,6 +4,11 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.12]
+
+- Security: resolve 20 open Dependabot alerts by pinning vulnerable transitive dependencies via pnpm overrides
+- Security: force patched versions for undici (7.24.0), minimatch (3.1.4/9.0.7/10.2.3), serialize-javascript (7.0.3), underscore (1.13.8), ajv (8.18.0), qs (6.14.2), and markdown-it (14.1.1)
+
 ## [0.1.11]
 
 - Fix: revert @types/vscode to ^1.74.0 to match engines.vscode and resolve vsce publish error

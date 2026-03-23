@@ -4,6 +4,11 @@
 
 このファイルには、拡張機能「nextjs-unused-media-checker」の主な変更点を記録します。
 
+## [0.1.12]
+
+- セキュリティ: pnpm overrides による推移依存の固定で、open 状態の Dependabot アラート 20 件に対応
+- セキュリティ: undici (7.24.0)、minimatch (3.1.4/9.0.7/10.2.3)、serialize-javascript (7.0.3)、underscore (1.13.8)、ajv (8.18.0)、qs (6.14.2)、markdown-it (14.1.1) へ更新固定
+
 ## [0.1.11]
 
 - 修正: @types/vscode を ^1.74.0 に戻し、engines.vscode との整合性を回復（vsce パブリッシュエラーの解消）
