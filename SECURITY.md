@@ -23,7 +23,7 @@ The extension only accesses:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.12  | :white_check_mark: |
+| 0.1.13  | :white_check_mark: |
 
 ## Security Best Practices
 
