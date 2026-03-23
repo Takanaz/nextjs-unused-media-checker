@@ -39,7 +39,7 @@
     "theme": "dark"
   },
   "main": "./dist/extension.js",
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.32.1",
   "contributes": {
     "commands": [
       {
@@ -124,23 +124,29 @@
     "release:ovsx": "pnpm run package && ovsx publish -p $OVSX_PAT"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.3",
+    "@biomejs/biome": "2.4.8",
     "@types/mocha": "^10.0.10",
-    "@types/node": "~20.19.32",
-    "@types/vscode": "^1.74.0",
+    "@types/node": "~25.5.0",
+    "@types/vscode": "^1.110.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "esbuild": "^0.25.12",
-    "lefthook": "^1.13.6",
+    "esbuild": "^0.27.4",
+    "lefthook": "^2.1.4",
     "npm-run-all": "^4.1.5",
     "ovsx": "^0.10.9",
     "typescript": "^5.9.3"
   },
   "pnpm": {
     "overrides": {
-      "glob@>=10.2.0 <10.5.0": "10.5.0",
-      "js-yaml@4.1.0": "4.1.1",
-      "diff": ">=8.0.3"
+      "undici": "7.24.0",
+      "underscore": "1.13.8",
+      "serialize-javascript": "7.0.3",
+      "minimatch@<3.1.4": "3.1.4",
+      "minimatch@>=9.0.0 <9.0.7": "9.0.7",
+      "minimatch@>=10.0.0 <10.2.3": "10.2.3",
+      "ajv@>=7.0.0-alpha.0 <8.18.0": "8.18.0",
+      "qs@>=6.7.0 <=6.14.1": "6.14.2",
+      "markdown-it@>=13.0.0 <14.1.1": "14.1.1"
     },
     "onlyBuiltDependencies": [
       "@vscode/vsce-sign",

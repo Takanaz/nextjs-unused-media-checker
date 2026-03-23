@@ -77,6 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders) {
         vscode.window.showErrorMessage(t('extension.noWorkspace'));
+
         return;
       }
 
@@ -91,6 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
         await fsPromises.access(publicPath);
       } catch {
         vscode.window.showErrorMessage(t('extension.noPublicDirectory'));
+
         return;
       }
 
@@ -173,6 +175,7 @@ export async function findMediaFiles(publicPath: string): Promise<string[]> {
       files = await fsPromises.readdir(dirPath, { withFileTypes: true });
     } catch (error) {
       console.warn(t('error.directoryRead', dirPath, String(error)));
+
       return;
     }
 
@@ -201,6 +204,7 @@ export async function findMediaFiles(publicPath: string): Promise<string[]> {
   }
 
   await scanDirectory(publicPath);
+
   return mediaFiles;
 }
 
@@ -228,6 +232,7 @@ export async function findUnusedMediaFiles(
   async function readTextFile(uri: vscode.Uri): Promise<string> {
     try {
       const bytes = await vscode.workspace.fs.readFile(uri);
+
       return new TextDecoder('utf-8').decode(bytes);
     } catch {
       // Fallback for environments/tests that only provide fsPath
@@ -241,9 +246,11 @@ export async function findUnusedMediaFiles(
   async function getFileSize(uri: vscode.Uri): Promise<number> {
     try {
       const stat = await vscode.workspace.fs.stat(uri);
+
       return stat.size;
     } catch {
       const stat = await fsPromises.stat(uri.fsPath);
+
       return stat.size;
     }
   }
@@ -292,6 +299,7 @@ export async function findUnusedMediaFiles(
     if (!trimmed) {
       return null;
     }
+
     if (EXTERNAL_URL_RE.test(trimmed) || DATA_URL_RE.test(trimmed)) {
       return null;
     }
@@ -305,6 +313,7 @@ export async function findUnusedMediaFiles(
     value = value.replace(/^public\/+/, '');
 
     value = value.trim();
+
     return value ? value.toLowerCase() : null;
   }
 
@@ -312,6 +321,7 @@ export async function findUnusedMediaFiles(
     const direct = mediaByPathLower.get(candidateLower);
     if (direct) {
       unusedFiles.delete(direct);
+
       return;
     }
 
@@ -344,6 +354,7 @@ export async function findUnusedMediaFiles(
           const size = await getFileSize(file);
           if (size > MAX_FILE_SIZE) {
             console.log(`Skipping large file: ${file.fsPath} (${size} bytes)`);
+
             return;
           }
 
@@ -358,6 +369,7 @@ export async function findUnusedMediaFiles(
             if (token.isCancellationRequested) {
               return;
             }
+
             const candidate = normalizeCandidate(match[2] ?? '');
             if (candidate) {
               markUsedByCandidate(candidate);
@@ -368,6 +380,7 @@ export async function findUnusedMediaFiles(
             if (token.isCancellationRequested) {
               return;
             }
+
             const raw = match[1] ?? '';
             // Heuristic: only consider strings that look like paths/filenames
             // Heuristic: パス/ファイル名っぽい文字列のみを候補として扱う
@@ -378,6 +391,7 @@ export async function findUnusedMediaFiles(
             ) {
               continue;
             }
+
             const candidate = normalizeCandidate(raw);
             if (candidate) {
               markUsedByCandidate(candidate);
@@ -421,6 +435,7 @@ function showResults(
 
   if (unusedFiles.length === 0) {
     vscode.window.showInformationMessage(t('extension.allFilesUsed'));
+
     return;
   }
 
@@ -430,6 +445,7 @@ function showResults(
     const filePath = path.join(publicPath, file);
     try {
       const stats = fs.statSync(filePath);
+
       return sum + stats.size;
     } catch {
       return sum;
@@ -454,6 +470,7 @@ function showResults(
           // Intentionally ignore; fallbacks handle next step.
           // ここは失敗しても後続のフォールバックで対応するため無視する
         }
+
         try {
           await vscode.commands.executeCommand(
             'revealInExplorer',
@@ -484,6 +501,7 @@ export function formatFileSize(bytes: number): string {
   const k = 1024;
   const sizes = [t('bytes'), t('kb'), t('mb'), t('gb')];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
