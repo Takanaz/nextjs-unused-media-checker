@@ -4,6 +4,13 @@ English | [日本語](CHANGELOG.ja.md)
 
 All notable changes to the "nextjs-unused-media-checker" extension will be documented in this file.
 
+## [0.1.13]
+
+- Security: resolve remaining jsdiff advisory (CVE-2026-24001) by pinning diff to 8.0.3
+- Maintenance: rollback min version of @types/vscode to 1.74.0
+- CI: bump pnpm version in release workflow from 10.28.2 to 10.32.1
+- CI: bump node version in release workflow from 20 to 24
+
 ## [0.1.12]
 
 - Security: resolve 20 open Dependabot alerts by pinning vulnerable transitive dependencies via pnpm overrides
