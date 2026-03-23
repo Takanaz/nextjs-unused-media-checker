@@ -42,3 +42,6 @@ yarn-error.log*
 
 # Claude AI
 .claude/
+
+# Cursor
+.cursor/
