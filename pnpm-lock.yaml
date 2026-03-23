@@ -30,7 +30,7 @@ importers:
         specifier: ~25.5.0
         version: 25.5.0
       '@types/vscode':
-        specifier: ^1.110.0
+        specifier: ^1.74.0
         version: 1.110.0
       '@vscode/test-cli':
         specifier: ^0.0.12
